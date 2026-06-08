@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Track Your Order | PizzaSaaS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-surface-variant": "#5d3f3e",
+                    "on-surface": "#1c1b1b",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#fd8100",
+                    "secondary-fixed": "#ffdcc6",
+                    "inverse-primary": "#ffb3b1",
+                    "secondary-fixed-dim": "#ffb785",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "surface-variant": "#e5e2e1",
+                    "surface-bright": "#fcf9f8",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-primary-fixed-variant": "#92001d",
+                    "on-secondary-fixed-variant": "#723700",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#f0eded",
+                    "surface": "#fcf9f8",
+                    "surface-container-high": "#eae7e7",
+                    "outline-variant": "#e6bdbb",
+                    "primary-fixed": "#ffdad8",
+                    "on-tertiary-container": "#fbfbfb",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#e31837",
+                    "on-secondary-fixed": "#301400",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#ffb3b1",
+                    "on-background": "#1c1b1b",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#313030",
+                    "secondary": "#954a00",
+                    "tertiary": "#5a5b5c",
+                    "background": "#fcf9f8",
+                    "surface-container-low": "#f6f3f2",
+                    "tertiary-container": "#727474",
+                    "primary": "#b90027",
+                    "on-primary-fixed": "#410007",
+                    "surface-dim": "#dcd9d9",
+                    "on-secondary-container": "#5d2c00",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#fffaf9",
+                    "inverse-on-surface": "#f3f0ef",
+                    "on-error-container": "#93000a",
+                    "outline": "#916e6d",
+                    "surface-tint": "#bf0029",
+                    "surface-container-highest": "#e5e2e1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "container-max": "1440px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-xl": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "button-text": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .progress-line {
+            background: linear-gradient(90deg, #e31837 40%, #e5e2e1 40%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-white/60 dark:bg-surface/60 backdrop-blur-md border-b border-white/10 shadow-sm">
+<div class="font-headline-lg text-headline-lg font-black text-primary italic">PizzaSaaS</div>
+<div class="hidden md:flex gap-8">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Menu</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Deals</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 transition-colors" href="#">Track Order</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Locations</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">shopping_cart</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">account_circle</button>
+</div>
+</nav>
+<main class="mt-16 min-h-screen relative">
+<!-- Live Map Background -->
+<div class="absolute inset-0 z-0 h-[614px] md:h-screen">
+<div class="w-full h-full bg-surface-container-high relative overflow-hidden">
+<img alt="Delivery Map" class="w-full h-full object-cover opacity-80" data-alt="A sophisticated digital map interface showcasing a simplified urban cityscape from an isometric perspective. The map uses a clean light-mode palette of soft greys and whites, with a glowing red line tracing a delivery route. Small, minimalist icons represent landmarks and the real-time position of a delivery vehicle, glowing subtly to suggest activity and progress." src="https://lh3.googleusercontent.com/aida/AP1WRLurpg9YNexXLZ0I1vIxxp74pdowGjQjJJ8d-7n-ZQAvEaKO5TzcNj7w-Tnzjvh_8_MdkQw1zRDJUm8xZ_Y4DfG0HSuBjqxF4uTso0Fn20PsteZc1-AWh2jcLzTokOKLXYxhpirfKDiuW_p4j-n65Bq5nwv3Eknaax3oMXaQ-OpkoaVwP4dRj-UkvBhga65Mwp89qqQuPWh8s7QFVeSKXxfBLXuYoi33pF-kzsVws9RknEfZHrQ4SQwWlETq"/>
+<!-- Overlay Gradient for legibility -->
+<div class="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-background"></div>
+</div>
+</div>
+<!-- Content Canvas -->
+<div class="relative z-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-8 pb-16 flex flex-col md:flex-row gap-gutter">
+<!-- Tracking Sidebar/Float -->
+<div class="w-full md:w-5/12 lg:w-4/12 flex flex-col gap-6">
+<!-- Order Status Glass Card -->
+<section class="glass-card rounded-xl p-6 shadow-sm">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-1">Estimated Arrival</p>
+<h1 class="font-display-xl text-display-xl text-on-surface leading-none">12:45 <span class="text-headline-lg font-medium">PM</span></h1>
+</div>
+<span class="bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-3 py-1 rounded-full uppercase">In Oven</span>
+</div>
+<!-- Visual Timeline -->
+<div class="space-y-6 relative mb-8">
+<!-- Connecting Line -->
+<div class="absolute left-4 top-2 bottom-2 w-0.5 bg-surface-variant z-0">
+<div class="h-[40%] w-full bg-primary transition-all duration-1000"></div>
+</div>
+<!-- Steps -->
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-button-text text-button-text text-on-surface">Order Received</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">12:15 PM</p>
+</div>
+</div>
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+<div>
+<p class="font-button-text text-button-text text-on-surface">Preparing</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">12:20 PM</p>
+</div>
+</div>
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-8 h-8 rounded-full bg-primary ring-4 ring-primary/20 animate-pulse flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<div>
+<p class="font-button-text text-button-text text-primary font-bold">In Oven</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Cooking now...</p>
+</div>
+</div>
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">delivery_dining</span>
+</div>
+<div>
+<p class="font-button-text text-button-text text-on-surface-variant">Out for Delivery</p>
+</div>
+</div>
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">home</span>
+</div>
+<div>
+<p class="font-button-text text-button-text text-on-surface-variant">Delivered</p>
+</div>
+</div>
+</div>
+<div class="border-t border-outline-variant/30 pt-4 mt-6">
+<button class="w-full bg-primary text-on-primary font-button-text py-4 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">support_agent</span>
+                            Contact Kitchen
+                        </button>
+</div>
+</section>
+<!-- Order Details Card -->
+<section class="glass-card rounded-xl p-6 shadow-sm overflow-hidden">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile mb-4">Order Details</h3>
+<div class="space-y-4">
+<div class="flex gap-4 items-center">
+<div class="w-16 h-16 rounded-lg bg-surface-container overflow-hidden shrink-0">
+<img alt="Pizza Item" class="w-full h-full object-cover" data-alt="A macro photograph of a steaming hot pepperoni pizza with melting mozzarella cheese and crispy burnt edges, placed on a clean wooden surface. The lighting is warm and directional, highlighting the textures of the crust and the glistening pepperoni oils. The scene feels appetizing and professional, maintaining a high-end gourmet pizza shop aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLs1IS7zKvePbGwOZbS9rmyl0VwmNLOdU-Cf6qltJBDuHm4OoaudUdeWmgDz_ArsWhuNs_dG-z2IUD19A0hMJHOw76WsCoj-JzRDN98WhnKItMA8vyXIQWks9f4A9saHnKm96uEvFU8qeVekIOObrB9acKyVtPGlw9ClRT46aYdrYVZgbHprZz6rLk5rIIF5yBobmzBSObQ00ImY12lxQ2GCka2PNV-O-y5PTXuY8S4aaCMXgZfE3hM3dUQ"/>
+</div>
+<div class="flex-1">
+<p class="font-button-text text-button-text">Large Pepperoni Feast</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Thin Crust, Extra Cheese</p>
+</div>
+<p class="font-label-sm text-label-sm font-bold text-on-surface">$24.99</p>
+</div>
+<div class="flex justify-between items-center py-2 border-t border-outline-variant/20">
+<span class="text-on-surface-variant font-label-sm text-label-sm">Order ID</span>
+<span class="font-label-sm text-label-sm text-on-surface">#PZA-8829-XL</span>
+</div>
+<div class="flex justify-between items-center py-2 border-t border-outline-variant/20">
+<span class="text-on-surface-variant font-label-sm text-label-sm">Delivery To</span>
+<span class="font-label-sm text-label-sm text-on-surface text-right">123 Culinary Way, Apt 4B</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Empty space for map desktop view focus -->
+<div class="hidden md:flex flex-1 items-end justify-end pointer-events-none pb-12">
+<div class="glass-card p-4 rounded-full flex items-center gap-4 pointer-events-auto shadow-lg animate-bounce">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">motorcycle</span>
+</div>
+<div class="pr-4">
+<p class="font-label-sm text-label-sm font-bold text-on-surface">Driver: Marco</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Arriving in 12 mins</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-8 px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest dark:bg-surface-dim border-t border-outline-variant relative z-20">
+<div class="font-headline-lg text-headline-lg font-extrabold text-primary mb-4 md:mb-0">PizzaSaaS</div>
+<div class="text-secondary font-label-sm text-label-sm text-center md:text-left mb-4 md:mb-0">
+            © 2024 PizzaSaaS Kitchen Systems. All rights reserved.
+        </div>
+<div class="flex gap-6">
+<a class="text-on-tertiary-fixed-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-tertiary-fixed-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-tertiary-fixed-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">Contact Us</a>
+</div>
+</footer>
+<script>
+        // Micro-interaction: Mimic live tracking movement or updates
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusBadge = document.querySelector('.bg-secondary-container');
+            const ovenIcon = document.querySelector('.animate-pulse');
+            
+            // Randomly simulate a status update after 15 seconds
+            setTimeout(() => {
+                if(statusBadge) {
+                    statusBadge.innerText = "Ready for Delivery";
+                    statusBadge.classList.replace('bg-secondary-container', 'bg-primary-container');
+                    statusBadge.classList.replace('text-on-secondary-container', 'text-on-primary-container');
+                }
+            }, 15000);
+        });
+    </script>
+</body></html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PizzaSaaS - High-Velocity Pizza Solutions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .pizza-shadow {
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.15));
+        }
+        body {
+            background-color: #fcf9f8;
+            color: #1c1b1b;
+            overflow-x: hidden;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-surface-variant": "#5d3f3e",
+                    "on-surface": "#1c1b1b",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#fd8100",
+                    "secondary-fixed": "#ffdcc6",
+                    "inverse-primary": "#ffb3b1",
+                    "secondary-fixed-dim": "#ffb785",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "surface-variant": "#e5e2e1",
+                    "surface-bright": "#fcf9f8",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-primary-fixed-variant": "#92001d",
+                    "on-secondary-fixed-variant": "#723700",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#f0eded",
+                    "surface": "#fcf9f8",
+                    "surface-container-high": "#eae7e7",
+                    "outline-variant": "#e6bdbb",
+                    "primary-fixed": "#ffdad8",
+                    "on-tertiary-container": "#fbfbfb",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#e31837",
+                    "on-secondary-fixed": "#301400",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#ffb3b1",
+                    "on-background": "#1c1b1b",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#313030",
+                    "secondary": "#954a00",
+                    "tertiary": "#5a5b5c",
+                    "background": "#fcf9f8",
+                    "surface-container-low": "#f6f3f2",
+                    "tertiary-container": "#727474",
+                    "primary": "#b90027",
+                    "on-primary-fixed": "#410007",
+                    "surface-dim": "#dcd9d9",
+                    "on-secondary-container": "#5d2c00",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#fffaf9",
+                    "inverse-on-surface": "#f3f0ef",
+                    "on-error-container": "#93000a",
+                    "outline": "#916e6d",
+                    "surface-tint": "#bf0029",
+                    "surface-container-highest": "#e5e2e1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "container-max": "1440px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-xl": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "button-text": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="font-body-md text-body-md">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-white/60 backdrop-blur-md border-b border-white/10 shadow-sm">
+<div class="flex items-center gap-8">
+<span class="font-headline-lg text-headline-lg font-black text-primary italic">PizzaSaaS</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md transition-colors" href="#">Menu</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors font-body-md text-body-md" href="#">Deals</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors font-body-md text-body-md" href="#">Track Order</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors font-body-md text-body-md" href="#">Locations</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-primary p-2 active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="text-primary p-2 active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center overflow-hidden bg-white">
+<div class="absolute inset-0 z-0 opacity-10 pointer-events-none">
+<div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/20 to-transparent"></div>
+</div>
+<div class="container mx-auto px-margin-desktop grid md:grid-cols-2 items-center gap-12 z-10">
+<div class="space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">
+<span class="material-symbols-outlined !text-[14px]" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+                        FRESH FROM THE OVEN
+                    </div>
+<h1 class="font-display-xl text-display-xl max-w-xl leading-tight">
+                        Revolutionize Your <span class="text-primary italic">Kitchen Workflow</span>
+</h1>
+<p class="text-on-surface-variant text-body-md max-w-lg">
+                        The ultimate Pizza SaaS platform designed for high-velocity kitchens. Real-time ingredient tracking, dynamic wizards, and automated delivery logistics all in one vibrant interface.
+                    </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="px-8 py-4 bg-primary text-on-primary rounded-lg font-button-text text-button-text shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
+                            Build Your Dream Pizza
+                        </button>
+<button class="px-8 py-4 glass-card border-primary/20 text-primary rounded-lg font-button-text text-button-text hover:bg-primary/5 transition-all active:scale-95">
+                            Watch Demo
+                        </button>
+</div>
+</div>
+<div class="relative flex justify-center items-center">
+<div class="absolute w-[120%] h-[120%] bg-radial-gradient from-primary/10 to-transparent rounded-full blur-3xl"></div>
+<img alt="Gourmet Pizza" class="w-full h-auto pizza-shadow relative z-10 rounded-full" data-alt="A macro, top-down photograph of a gourmet artisanal pizza with fresh basil, bubbling mozzarella, and spicy pepperoni, resting on a clean white surface. The lighting is high-key and professional, accentuating the textures of the crispy crust and melted cheese. Vibrant red sauce pops against the bright, modern light-mode background, creating an energetic and appetizing atmosphere." src="https://lh3.googleusercontent.com/aida/AP1WRLuIWrxAjF9EqoMRA6F4N9mUqNYcHfFyksY0M0UPeE-RzW48XceX1soEmfIs1j-7NRL_d5P1ubYsoqh7NWEd7kzYxiNza0ZlyGJ5npDyyUakLuOFzUXDt43NbbMjD_D9bhXB8_Q25LcRfmT0keVKNVXcdsSWrFcFmBKo5uJyknfiVEPqMCJP2aYiL_L_AzWvOZfx0XfGou1kz313zirTvRZ-P92SGb638rnL3WwVQQOCL1IsPOsWsnvE7hY"/>
+</div>
+</div>
+</section>
+<!-- Trending Pizzas (Bento Grid) -->
+<section class="py-20 bg-surface-container-low">
+<div class="container mx-auto px-margin-desktop">
+<div class="mb-12">
+<h2 class="font-headline-lg text-headline-lg mb-2">Trending This Week</h2>
+<p class="text-on-surface-variant">The most loved configurations from our top-performing kitchens.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
+<!-- Large Card -->
+<div class="md:col-span-7 relative group overflow-hidden rounded-xl glass-card border-none shadow-sm">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A lush, close-up shot of a mediterranean style pizza featuring roasted vegetables, olives, and feta cheese. The lighting is warm and golden, evoking an open-kitchen sunset vibe. The background is softly blurred to keep focus on the textures of the toppings. The overall aesthetic is clean, professional, and highly appetizing, fitting a modern SaaS platform." src="https://lh3.googleusercontent.com/aida/AP1WRLs_P59qIC8mCSkk9LfEbxxwXOipw4BTggC4Tz1um6belm3jimytb27z9LiG_pHJvxj7rmXJkD4mQC3GLO2p--4qbX5v1T2AqgaflISgL3mSjmyO6cooYU6so_mHw2Nua_2cl659fyVjgjAYA10TYuOYjll3oZtAk47uaOVwiCVN7BDWY2XjS6ILj2nDWSWFoNNNHym6TfjkUhYPZfsJxVy148LT8UU2MwA0AQClEijIrLrl56k5m0UFr30"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 text-white">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container rounded font-label-sm text-label-sm mb-4 inline-block">BEST SELLER</span>
+<h3 class="text-3xl font-bold mb-2">The Mediterranean Tech</h3>
+<p class="text-white/80 max-w-md mb-6">Roasted red peppers, Kalamata olives, feta, and a drizzle of balsamic glaze on a sourdough crust.</p>
+<button class="flex items-center gap-2 font-button-text text-button-text hover:underline">
+                                Customize Now <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Side Grid -->
+<div class="md:col-span-5 flex flex-col gap-6">
+<div class="h-1/2 relative group overflow-hidden rounded-xl glass-card border-none shadow-sm">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="An overhead view of a classic Margherita pizza with bright green basil leaves and dollops of white mozzarella. The image is captured in a bright, airy studio with high-key lighting that emphasizes the red tomato sauce. The composition is minimalist and high-end, perfectly aligned with a glassmorphic UI design system." src="https://lh3.googleusercontent.com/aida/AP1WRLu4F7y36CYCY0-B2497jhPSSlV7Ki8qpwEsipjjqEFtlzf6qwvPp8ompKiSUKjFOKdxn14dH5ycVWZhRg_czqyGgDocaesy0R5fECcayWjTuWThxnmQGfzX8zuRFzaWo3qVpUAouGPOIMfCaIexwr7iixFo8iAB1IyceeBIiePr2wl0VTVsHLfAJbw4KiLPDpwQYiwl-ryWCmv0mIbGeaQmCtaf8b-wVi90XrAnynYpfh23kW13aTqR64AS"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 text-white">
+<h4 class="text-xl font-bold">Classic API Margherita</h4>
+<p class="text-white/70 font-label-sm text-label-sm">Pure, simple, reliable.</p>
+</div>
+</div>
+<div class="h-1/2 relative group overflow-hidden rounded-xl glass-card border-none shadow-sm">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A detail shot of a spicy buffalo chicken pizza with drizzles of ranch and blue cheese crumbles. The colors are vibrant, featuring deep oranges and creamy whites. The lighting is sharp, creating a professional food photography look that feels modern and high-velocity, consistent with the SaaS branding." src="https://lh3.googleusercontent.com/aida/AP1WRLsnZ1eqjGTJDJtQrkJbhLST0vrJen3dfOB9JgQaHSBPyo4E5k7vBEWywwcji32dA0k7-J7CFDJalx2mf_yTOCK7Q0tIHGMuc_o2U6C9E9xnq2WUKNdRtqxjEKQulD5nfqlJq6eDr--O2WxXICAPOXGuj1aoYIKpSNdhjsPn84daGOVjMFnXZH8F9wCaXpbDvXAk8y1n2CXWqQQi6-fCwjtXrb74W26o_BicW25PfjSKkRut4VmCUPBDjZEr"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 text-white">
+<h4 class="text-xl font-bold">Hot-Reload Buffalo</h4>
+<p class="text-white/70 font-label-sm text-label-sm">For those who like a little kick.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-24 bg-white relative">
+<div class="container mx-auto px-margin-desktop">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<h2 class="font-headline-lg text-headline-lg mb-4">Precision in Every Slice</h2>
+<p class="text-on-surface-variant">Our SaaS handles the complexity so you can focus on the flavor.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-12">
+<div class="text-center space-y-6">
+<div class="w-20 h-20 mx-auto rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined !text-4xl" data-icon="restaurant_menu">restaurant_menu</span>
+</div>
+<h3 class="text-xl font-bold">1. Digital Dough Prep</h3>
+<p class="text-on-surface-variant px-4">Our algorithm predicts demand ensuring your dough is always at the perfect fermentation state.</p>
+</div>
+<div class="text-center space-y-6">
+<div class="w-20 h-20 mx-auto rounded-full bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined !text-4xl" data-icon="ovens">cooking</span>
+</div>
+<h3 class="text-xl font-bold">2. Real-time Monitoring</h3>
+<p class="text-on-surface-variant px-4">Track every oven's temperature and humidity in real-time with our IoT-integrated kitchen dashboard.</p>
+</div>
+<div class="text-center space-y-6">
+<div class="w-20 h-20 mx-auto rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined !text-4xl" data-icon="local_shipping">local_shipping</span>
+</div>
+<h3 class="text-xl font-bold">3. Smart Logistics</h3>
+<p class="text-on-surface-variant px-4">Automated routing ensures every pizza arrives hot, fresh, and within the 30-minute window.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials (Glass Cards) -->
+<section class="py-20 bg-surface-container relative overflow-hidden">
+<div class="absolute top-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+<div class="container mx-auto px-margin-desktop relative z-10">
+<h2 class="font-headline-lg text-headline-lg mb-12 text-center">Success Stories</h2>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Testimonial 1 -->
+<div class="glass-card p-8 rounded-2xl shadow-sm border-white/40 flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300">
+<div class="space-y-4">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="italic text-on-surface">"The glassmorphic dashboard isn't just beautiful—it's incredibly efficient. We've reduced our ticket times by 22% since switching."</p>
+</div>
+<div class="mt-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">AM</div>
+<div>
+<p class="font-bold">Anthony Marcino</p>
+<p class="text-xs text-on-surface-variant font-label-sm uppercase">CEO, Marcino's Pizza</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="glass-card p-8 rounded-2xl shadow-sm border-white/40 flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300">
+<div class="space-y-4">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="italic text-on-surface">"The live pizza builder is a game changer. Our customers spend more time customizing, leading to a 15% increase in average order value."</p>
+</div>
+<div class="mt-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center font-bold text-secondary">SL</div>
+<div>
+<p class="font-bold">Sarah Ling</p>
+<p class="text-xs text-on-surface-variant font-label-sm uppercase">Kitchen Director, Crust &amp; Co</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="glass-card p-8 rounded-2xl shadow-sm border-white/40 flex flex-col justify-between hover:-translate-y-2 transition-transform duration-300">
+<div class="space-y-4">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="italic text-on-surface">"Scaling to 50 locations was a breeze with PizzaSaaS. The inventory analytics alone paid for the subscription in three months."</p>
+</div>
+<div class="mt-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary/20 flex items-center justify-center font-bold text-tertiary">DK</div>
+<div>
+<p class="font-bold">David Kovaks</p>
+<p class="text-xs text-on-surface-variant font-label-sm uppercase">Founder, Dough King</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-8 px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant">
+<div class="mb-6 md:mb-0 text-center md:text-left">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary block mb-2">PizzaSaaS</span>
+<p class="font-label-sm text-label-sm text-on-tertiary-fixed-variant">© 2024 PizzaSaaS Kitchen Systems. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-label-sm text-label-sm text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Contact Us</a>
+</div>
+</footer>
+<script>
+        // Micro-interactions for glass cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simple scroll reveal for the header
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const header = document.querySelector('header');
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+            lastScroll = currentScroll;
+        });
+    </script>
+</body></html>

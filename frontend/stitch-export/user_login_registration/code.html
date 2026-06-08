@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PizzaSaaS - Authentication</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-surface-variant": "#5d3f3e",
+                    "on-surface": "#1c1b1b",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#fd8100",
+                    "secondary-fixed": "#ffdcc6",
+                    "inverse-primary": "#ffb3b1",
+                    "secondary-fixed-dim": "#ffb785",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "surface-variant": "#e5e2e1",
+                    "surface-bright": "#fcf9f8",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-primary-fixed-variant": "#92001d",
+                    "on-secondary-fixed-variant": "#723700",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#f0eded",
+                    "surface": "#fcf9f8",
+                    "surface-container-high": "#eae7e7",
+                    "outline-variant": "#e6bdbb",
+                    "primary-fixed": "#ffdad8",
+                    "on-tertiary-container": "#fbfbfb",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#e31837",
+                    "on-secondary-fixed": "#301400",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#ffb3b1",
+                    "on-background": "#1c1b1b",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#313030",
+                    "secondary": "#954a00",
+                    "tertiary": "#5a5b5c",
+                    "background": "#fcf9f8",
+                    "surface-container-low": "#f6f3f2",
+                    "tertiary-container": "#727474",
+                    "primary": "#b90027",
+                    "on-primary-fixed": "#410007",
+                    "surface-dim": "#dcd9d9",
+                    "on-secondary-container": "#5d2c00",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#fffaf9",
+                    "inverse-on-surface": "#f3f0ef",
+                    "on-error-container": "#93000a",
+                    "outline": "#916e6d",
+                    "surface-tint": "#bf0029",
+                    "surface-container-highest": "#e5e2e1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "container-max": "1440px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-xl": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "button-text": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pizza-hero-gradient {
+            background: linear-gradient(to right, rgba(28, 27, 27, 0.4), transparent);
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-surface overflow-hidden">
+<!-- Auth Layout Wrapper -->
+<main class="flex h-screen w-full overflow-hidden">
+<!-- Left Side: High-Impact Visual Content -->
+<section class="hidden lg:flex lg:w-7/12 relative h-full overflow-hidden bg-primary">
+<img alt="Artisanal Pizza" class="absolute inset-0 w-full h-full object-cover" data-alt="A macro close-up of a steaming hot artisanal pizza with melted mozzarella stretching between slices, scattered fresh basil leaves, and vibrant red tomato sauce. The lighting is dramatic and warm, with high-key highlights that emphasize the textures of the crispy crust. The overall aesthetic is energetic and appetizing, featuring a modern glassmorphic clarity with deep shadows and vibrant red accents to match the brand identity." src="https://lh3.googleusercontent.com/aida/AP1WRLut451JiIbDhLoYePinx0PG4NniHu3HlQVE0bvoeaRs2XlAZLGGn5LK5kqud0pQJTD4B9M0nACzYEUk1aHE781QT3CUVTy-YYgmUobpTHB7PwZ0l_yJnKEcXHnQiYXFYabzRH2r1MyUnZd_JFJAGXv0M3J18Gw-vUs3SOU_g5UIRWoF49m2F-TzNVc4-1pdJOUxCYRhhBZ5KvB47ZFcZw7j7WA0U_bkAq62yDaHn_11msrL95zGJiUA76g"/>
+<div class="absolute inset-0 pizza-hero-gradient flex flex-col justify-end p-margin-desktop bg-black/20">
+<div class="max-w-2xl mb-12 animate-fade-in">
+<h1 class="font-display-xl text-display-xl text-white italic font-black leading-tight mb-4">
+                        PizzaSaaS
+                    </h1>
+<p class="font-headline-lg text-headline-lg text-white/90 font-medium">
+                        The ultimate engine for high-velocity kitchen systems.
+                    </p>
+<div class="mt-8 flex gap-4">
+<div class="glass-panel px-6 py-4 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-sm text-label-sm text-white uppercase tracking-widest">Real-time Delivery</span>
+</div>
+<div class="glass-panel px-6 py-4 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="font-label-sm text-label-sm text-white uppercase tracking-widest">Kitchen Control</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Side: Clean Authentication Canvas -->
+<section class="w-full lg:w-5/12 h-full flex flex-col bg-surface relative z-10 shadow-2xl">
+<!-- Top Branding (Mobile) / Utility -->
+<div class="p-margin-mobile md:p-margin-desktop flex justify-between items-center">
+<div class="lg:hidden">
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-black text-primary italic">PizzaSaaS</span>
+</div>
+<div class="ml-auto flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Switch Theme</span>
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors" id="theme-toggle">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+</div>
+</div>
+<!-- Content Area: Toggled between Login and Register -->
+<div class="flex-grow flex items-center justify-center px-margin-mobile md:px-20">
+<!-- Login View -->
+<div class="w-full max-w-md animate-fade-in" id="login-view">
+<div class="mb-10">
+<h2 class="font-headline-lg text-headline-lg mb-2">Welcome Back</h2>
+<p class="text-on-surface-variant">Sign in to manage your kitchen operations.</p>
+</div>
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1" for="login-email">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60">mail</span>
+<input class="w-full pl-12 pr-4 py-4 rounded-xl bg-surface-container-low border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="login-email" placeholder="kitchen@pizzasaas.com" type="email"/>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-center px-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="login-password">Password</label>
+<a class="font-label-sm text-label-sm text-primary hover:underline" href="#">Forgot Password?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60">lock</span>
+<input class="w-full pl-12 pr-4 py-4 rounded-xl bg-surface-container-low border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="login-password" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 hover:text-primary" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-3 px-1">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" id="remember" type="checkbox"/>
+<label class="font-body-md text-body-md text-on-surface-variant cursor-pointer" for="remember">Remember this kitchen device</label>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container py-4 rounded-xl font-button-text text-button-text shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all" type="submit">
+                            Sign In to Kitchen
+                        </button>
+<div class="relative py-4">
+<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-outline-variant"></div></div>
+<div class="relative flex justify-center text-sm"><span class="bg-surface px-4 text-on-surface-variant font-label-sm text-label-sm">OR CONTINUE WITH</span></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 py-3 rounded-xl border border-outline-variant hover:bg-surface-container transition-all" type="button">
+<img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida/AP1WRLu07a3ck9PMKvYeVWCG8GU11pcYhl62th7VGLr-8tga5EnPPm7Xst0UEREaUZyBmDydCOsULqiidxxj4hVHEcFftd-0A-ea854i38n6fsvaH4l7FK_PFoqyHRLfpIsI7aa8xUZtg32QFjwlBtT-YPda1JR3AHTfgYO25pDMqBVSfKEnL_4hjvijIhrJbtu-Mf0NB2V2jGDijTEAu9tg0ytI7jQ4-WgPDHpbuTGzOgARV4vB_v_dMJvWLjVP"/>
+<span class="font-button-text text-button-text">Google</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-3 rounded-xl border border-outline-variant hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-on-surface">tablet_mac</span>
+<span class="font-button-text text-button-text">Apple</span>
+</button>
+</div>
+</form>
+<p class="mt-10 text-center font-body-md text-body-md text-on-surface-variant">
+                        New to the system? 
+                        <button class="text-primary font-bold hover:underline" onclick="toggleAuth('register')">Apply for Access</button>
+</p>
+</div>
+<!-- Registration View (Hidden by default) -->
+<div class="hidden w-full max-w-md animate-fade-in" id="register-view">
+<div class="mb-8">
+<h2 class="font-headline-lg text-headline-lg mb-2">Create Kitchen Account</h2>
+<p class="text-on-surface-variant">Start your 14-day premium pizza SaaS trial.</p>
+</div>
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">First Name</label>
+<input class="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" placeholder="John" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">Last Name</label>
+<input class="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" placeholder="Doe" type="text"/>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">Store Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60">store</span>
+<input class="w-full pl-12 pr-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" placeholder="Downtown Pizzeria" type="text"/>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">Work Email</label>
+<input class="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" placeholder="manager@pizzeria.com" type="email"/>
+</div>
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">Password</label>
+<input class="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" placeholder="Create strong password" type="password"/>
+<div class="flex gap-1 mt-2">
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full bg-primary-container text-on-primary-container py-4 rounded-xl font-button-text text-button-text shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all" type="submit">
+                                Start Free Trial
+                            </button>
+</div>
+</form>
+<p class="mt-8 text-center font-body-md text-body-md text-on-surface-variant">
+                        Already have an account? 
+                        <button class="text-primary font-bold hover:underline" onclick="toggleAuth('login')">Sign In</button>
+</p>
+<p class="mt-6 text-center text-[10px] text-on-surface-variant/60 uppercase tracking-tighter">
+                        By signing up, you agree to our Terms of Service and Privacy Policy.
+                    </p>
+</div>
+</div>
+<!-- Footer Links -->
+<footer class="p-margin-mobile md:p-margin-desktop flex flex-wrap justify-center gap-6 border-t border-outline-variant/10">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Kitchen Support</a>
+</footer>
+</section>
+</main>
+<script>
+        function toggleAuth(view) {
+            const loginView = document.getElementById('login-view');
+            const registerView = document.getElementById('register-view');
+
+            if (view === 'register') {
+                loginView.classList.add('hidden');
+                registerView.classList.remove('hidden');
+            } else {
+                registerView.classList.add('hidden');
+                loginView.classList.remove('hidden');
+            }
+        }
+
+        // Theme Toggle Micro-interaction
+        const themeBtn = document.getElementById('theme-toggle');
+        let isDark = false;
+        themeBtn.addEventListener('click', () => {
+            isDark = !isDark;
+            document.documentElement.classList.toggle('dark');
+            themeBtn.innerHTML = isDark ? 
+                '<span class="material-symbols-outlined">light_mode</span>' : 
+                '<span class="material-symbols-outlined">dark_mode</span>';
+        });
+
+        // Atmospheric effect: Subtle parallax on mouse move for the hero image
+        document.addEventListener('mousemove', (e) => {
+            const heroImg = document.querySelector('section img');
+            if (!heroImg) return;
+            const mouseX = (e.clientX / window.innerWidth) - 0.5;
+            const mouseY = (e.clientY / window.innerHeight) - 0.5;
+            heroImg.style.transform = `scale(1.1) translate(${mouseX * 20}px, ${mouseY * 20}px)`;
+        });
+    </script>
+</body></html>

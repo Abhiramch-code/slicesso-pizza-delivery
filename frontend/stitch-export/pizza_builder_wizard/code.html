@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PizzaSaaS - Interactive Pizza Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface-variant": "#5d3f3e",
+                        "on-surface": "#1c1b1b",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#fd8100",
+                        "secondary-fixed": "#ffdcc6",
+                        "inverse-primary": "#ffb3b1",
+                        "secondary-fixed-dim": "#ffb785",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-variant": "#e5e2e1",
+                        "surface-bright": "#fcf9f8",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-primary-fixed-variant": "#92001d",
+                        "on-secondary-fixed-variant": "#723700",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#f0eded",
+                        "surface": "#fcf9f8",
+                        "surface-container-high": "#eae7e7",
+                        "outline-variant": "#e6bdbb",
+                        "primary-fixed": "#ffdad8",
+                        "on-tertiary-container": "#fbfbfb",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#e31837",
+                        "on-secondary-fixed": "#301400",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#313030",
+                        "secondary": "#954a00",
+                        "tertiary": "#5a5b5c",
+                        "background": "#fcf9f8",
+                        "surface-container-low": "#f6f3f2",
+                        "tertiary-container": "#727474",
+                        "primary": "#b90027",
+                        "on-primary-fixed": "#410007",
+                        "surface-dim": "#dcd9d9",
+                        "on-secondary-container": "#5d2c00",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fffaf9",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-error-container": "#93000a",
+                        "outline": "#916e6d",
+                        "surface-tint": "#bf0029",
+                        "surface-container-highest": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "button-text": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .pizza-layer {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .step-transition {
+            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-white/60 backdrop-blur-md border-b border-white/10 shadow-sm">
+<div class="font-headline-lg text-headline-lg font-black text-primary italic">PizzaSaaS</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Menu</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Deals</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Track Order</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Locations</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant">shopping_cart</button>
+<button class="material-symbols-outlined text-on-surface-variant">account_circle</button>
+</div>
+</nav>
+<main class="pt-24 pb-32 min-h-screen px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Progress Stepper -->
+<div class="max-w-3xl mx-auto mb-12">
+<div class="flex justify-between items-center relative">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-surface-variant -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-0 h-[2px] bg-primary -translate-y-1/2 z-0 transition-all duration-500" id="progress-bar"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20">1</div>
+<span class="font-label-sm text-label-sm text-primary uppercase">Crust</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold">2</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Sauce</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold">3</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Cheese</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold">4</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Toppings</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold">5</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Review</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<!-- Left: Live Pizza Preview (Sticky) -->
+<div class="md:col-span-7 lg:col-span-7 sticky top-24">
+<div class="relative aspect-square w-full max-w-[600px] mx-auto group">
+<!-- Background Glow -->
+<div class="absolute inset-0 bg-secondary-container/10 rounded-full blur-3xl scale-90 group-hover:scale-100 transition-transform duration-700"></div>
+<!-- Pizza Composition -->
+<div class="relative z-10 w-full h-full flex items-center justify-center">
+<!-- Plate -->
+<div class="absolute inset-4 rounded-full border border-outline-variant/30 shadow-2xl bg-white/10 backdrop-blur-sm"></div>
+<!-- Crust Layer -->
+<img alt="Crust" class="pizza-layer absolute inset-8 rounded-full object-cover shadow-xl" data-alt="A high-resolution top-down shot of a golden-brown, artisanal pizza crust with a rustic, bubbly edge. The lighting is warm and cinematic, highlighting the crispy texture of the dough against a clean, modern white studio background with soft orange glows." id="preview-crust" src="https://lh3.googleusercontent.com/aida/AP1WRLsLL4Jl9bltCdlpgAsYDY_ePC68QjI1WvzYvSyv9JUtBIpBt_WF6rnE2GqkfERXhZ49oT9-qW5eFtJpDpNlR389jgfSxDOy2Q1MZwBkN6n0kxp9TGwPIzKaQ42IQ3yVipcpPEG30nIPmctaJN0I7NdtLHNm1yp1yUA1v5c6BB-CwXiQlc09V6tTpwLqLebmlKyQC75oYVcBMGqfu2dl38K2P_Qe_d3tTjCT-IZwInV0B06a7pBc-_uXBnc"/>
+<!-- Sauce Overlay (Dynamic Opacity) -->
+<div class="pizza-layer absolute inset-10 rounded-full bg-red-600/60 opacity-0 mix-blend-multiply transition-opacity duration-500" id="preview-sauce"></div>
+<!-- Cheese Overlay (Dynamic Opacity) -->
+<div class="pizza-layer absolute inset-10 rounded-full overflow-hidden opacity-0 transition-opacity duration-500" id="preview-cheese">
+<img alt="Cheese" class="w-full h-full object-cover" data-alt="High-resolution visual of melted mozzarella cheese with golden toasted spots and a gooey, bubbly texture. The lighting is bright and appetizing, emphasizing the rich creaminess of the cheese as it spreads over a pizza base in a modern culinary style." src="https://lh3.googleusercontent.com/aida/AP1WRLswoX7yScmZEYTvE1ZmQQtp2miT5ButTm3dVLwznE-2qbRpiv0EHDmh6lqO9tvjvq5zl9ivJiG-Amwp16UWMtX7zDEZaUHx5IHcBE68VATHw1zD2ycHRKeJLSHwXul9eVpLTSoImluMdllbM7qMk7IEv8U0igiNwzr3nzKAVEjIi4wauWDTtPsjXVr3tJQKEFgso6eYihl43GaHG5Kvvz2lqEbmr8kgxWx44GwcdpRR-gqpzzz_XUQAALMP"/>
+</div>
+<!-- Toppings Layer (Dynamic Display) -->
+<div class="absolute inset-10 opacity-0 transition-opacity duration-500" id="preview-toppings">
+<!-- Topping instances generated via JS -->
+</div>
+</div>
+<!-- Floating Badge -->
+<div class="absolute -bottom-4 right-8 glass-card py-3 px-6 rounded-xl flex items-center gap-3 z-20">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Est. Time</span>
+<span class="font-bold text-on-surface">12-15 Mins</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Ingredient Controls -->
+<div class="md:col-span-5 lg:col-span-5 flex flex-col gap-6">
+<!-- Active Wizard Step Container -->
+<div class="glass-card p-8 rounded-2xl flex flex-col gap-6 min-h-[500px]" id="wizard-content">
+<div class="flex flex-col gap-1">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Select Your Crust</h2>
+<p class="text-on-surface-variant">The foundation of every great pizza starts with the perfect base.</p>
+</div>
+<div class="grid grid-cols-1 gap-4 overflow-y-auto pr-2" id="options-grid">
+<!-- Options injected by JS -->
+<label class="group relative flex items-center p-4 rounded-xl border-2 border-outline-variant hover:border-primary transition-all cursor-pointer bg-white/40">
+<input checked="" class="hidden" name="crust" type="radio"/>
+<div class="flex-1 flex flex-col">
+<span class="font-bold text-on-surface">Classic Thin</span>
+<span class="text-on-surface-variant text-sm">Crispy, light, and traditional.</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">+$0.00</span>
+</label>
+<label class="group relative flex items-center p-4 rounded-xl border-2 border-transparent hover:border-primary transition-all cursor-pointer bg-white/40">
+<input class="hidden" name="crust" type="radio"/>
+<div class="flex-1 flex flex-col">
+<span class="font-bold text-on-surface">Deep Dish</span>
+<span class="text-on-surface-variant text-sm">Thick, buttery crust with high edges.</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">+$2.50</span>
+</label>
+<label class="group relative flex items-center p-4 rounded-xl border-2 border-transparent hover:border-primary transition-all cursor-pointer bg-white/40">
+<input class="hidden" name="crust" type="radio"/>
+<div class="flex-1 flex flex-col">
+<span class="font-bold text-on-surface">Stuffed Crust</span>
+<span class="text-on-surface-variant text-sm">Mozzarella filled outer ring.</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">+$3.00</span>
+</label>
+</div>
+</div>
+<!-- Navigation Buttons -->
+<div class="flex gap-4">
+<button class="flex-1 py-4 px-6 rounded-xl font-button-text text-button-text glass-card text-on-surface border border-outline-variant hover:bg-surface-variant transition-all invisible" id="prev-btn">
+                        Back
+                    </button>
+<button class="flex-[2] py-4 px-6 rounded-xl font-button-text text-button-text bg-primary text-white shadow-lg shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all" id="next-btn">
+                        Next: Choose Sauce
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Pricing / Footer Bar -->
+<footer class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-xl border-t border-white/20 z-50 py-4 px-margin-desktop">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-8">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Current Build</span>
+<span class="font-bold text-on-surface truncate max-w-[200px] md:max-w-md" id="summary-text">Classic Thin • No Sauce • No Cheese</span>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant hidden md:block"></div>
+<div class="flex flex-col items-center md:items-start">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Subtotal</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-black text-primary" id="total-price">$12.00</span>
+</div>
+</div>
+<div class="flex gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-8 py-3 rounded-xl border border-primary text-primary font-button-text hover:bg-primary-fixed-dim transition-colors">
+                    Save Draft
+                </button>
+<button class="flex-1 md:flex-none px-8 py-3 rounded-xl bg-primary-container text-on-primary-container font-button-text shadow-md hover:brightness-110 transition-all opacity-50 cursor-not-allowed" id="final-cta">
+                    Add to Cart
+                </button>
+</div>
+</div>
+</footer>
+<script>
+        const steps = [
+            { 
+                title: "Select Your Crust", 
+                sub: "The foundation of every great pizza.",
+                options: [
+                    { name: "Classic Thin", price: 0, sub: "Crispy, light, and traditional." },
+                    { name: "Deep Dish", price: 2.50, sub: "Thick, buttery crust with high edges." },
+                    { name: "Stuffed Crust", price: 3.00, sub: "Mozzarella filled outer ring." },
+                    { name: "Gluten Free", price: 3.50, sub: "Wheat-free cauliflower base." }
+                ],
+                type: 'radio',
+                key: 'crust'
+            },
+            { 
+                title: "Choose Your Sauce", 
+                sub: "Bold flavors to complement your toppings.",
+                options: [
+                    { name: "Signature Red", price: 0, sub: "Sun-ripened San Marzano tomatoes." },
+                    { name: "Creamy Alfredo", price: 1.00, sub: "Rich garlic parmesan base." },
+                    { name: "Spicy Marinara", price: 0.50, sub: "Red sauce with a chili kick." },
+                    { name: "Pesto Swirl", price: 1.50, sub: "Fresh basil and pine nut blend." }
+                ],
+                type: 'radio',
+                key: 'sauce'
+            },
+            { 
+                title: "Extra Cheese?", 
+                sub: "Select your favorite dairy or vegan options.",
+                options: [
+                    { name: "Mozzarella", price: 0, sub: "Fresh, melty perfection." },
+                    { name: "Smoked Provolone", price: 1.00, sub: "Deep, savory complexity." },
+                    { name: "Vegan Cashew", price: 2.00, sub: "Dairy-free creamy alternative." },
+                    { name: "Double Cheese", price: 1.50, sub: "Twice the mozzarella pull." }
+                ],
+                type: 'radio',
+                key: 'cheese'
+            },
+            { 
+                title: "Prime Toppings", 
+                sub: "Mix and match to create your masterpiece.",
+                options: [
+                    { name: "Pepperoni", price: 1.50, icon: "local_pizza" },
+                    { name: "Mushrooms", price: 1.00, icon: "nest_eco_leaf" },
+                    { name: "Fresh Peppers", price: 1.00, icon: "psychiatry" },
+                    { name: "Italian Sausage", price: 2.00, icon: "kebab_dining" },
+                    { name: "Black Olives", price: 1.00, icon: "radio_button_checked" },
+                    { name: "Pineapple", price: 1.00, icon: "nutrition" }
+                ],
+                type: 'checkbox',
+                key: 'toppings'
+            },
+            { 
+                title: "Review & Order", 
+                sub: "Looks delicious! Ready to checkout?",
+                type: 'review'
+            }
+        ];
+
+        let currentStep = 0;
+        let selections = {
+            crust: "Classic Thin",
+            sauce: "None",
+            cheese: "None",
+            toppings: []
+        };
+        let basePrice = 12.00;
+
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const wizardContent = document.getElementById('wizard-content');
+        const progressBar = document.getElementById('progress-bar');
+        const summaryText = document.getElementById('summary-text');
+        const totalPriceEl = document.getElementById('total-price');
+
+        function updateUI() {
+            const step = steps[currentStep];
+            
+            // Update Navigation
+            prevBtn.classList.toggle('invisible', currentStep === 0);
+            if (currentStep === steps.length - 1) {
+                nextBtn.innerText = "Confirm Order";
+                document.getElementById('final-cta').classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                nextBtn.innerText = `Next: ${steps[currentStep + 1].title.replace('Select ', '').replace('Choose ', '')}`;
+                document.getElementById('final-cta').classList.add('opacity-50', 'cursor-not-allowed');
+            }
+
+            // Update Progress
+            progressBar.style.width = `${(currentStep / (steps.length - 1)) * 100}%`;
+            
+            // Re-render wizard content
+            let contentHtml = `
+                <div class="flex flex-col gap-1">
+                    <h2 class="font-headline-lg text-headline-lg text-on-surface">${step.title}</h2>
+                    <p class="text-on-surface-variant">${step.sub}</p>
+                </div>
+                <div class="grid grid-cols-1 ${step.key === 'toppings' ? 'md:grid-cols-2' : ''} gap-4 overflow-y-auto pr-2" id="options-grid">
+            `;
+
+            if (step.type === 'review') {
+                contentHtml += `
+                    <div class="flex flex-col gap-4">
+                        <div class="p-4 rounded-xl bg-surface-container flex justify-between">
+                            <span class="font-bold">Crust</span>
+                            <span>${selections.crust}</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-surface-container flex justify-between">
+                            <span class="font-bold">Sauce</span>
+                            <span>${selections.sauce}</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-surface-container flex justify-between">
+                            <span class="font-bold">Cheese</span>
+                            <span>${selections.cheese}</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-surface-container flex flex-col gap-2">
+                            <span class="font-bold">Toppings</span>
+                            <div class="flex flex-wrap gap-2">
+                                ${selections.toppings.length ? selections.toppings.map(t => `<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">${t}</span>`).join('') : '<span class="text-on-surface-variant">No toppings selected</span>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                step.options.forEach(opt => {
+                    const isSelected = step.type === 'radio' ? selections[step.key] === opt.name : selections.toppings.includes(opt.name);
+                    contentHtml += `
+                        <label class="group relative flex items-center p-4 rounded-xl border-2 ${isSelected ? 'border-primary bg-primary/5' : 'border-transparent bg-white/40'} hover:border-primary/50 transition-all cursor-pointer">
+                            <input type="${step.type}" name="${step.key}" value="${opt.name}" class="hidden" ${isSelected ? 'checked' : ''} onchange="handleSelection('${step.key}', '${opt.name}', ${opt.price}, '${step.type}')">
+                            <div class="flex-1 flex flex-col">
+                                <span class="font-bold text-on-surface">${opt.name}</span>
+                                ${opt.sub ? `<span class="text-on-surface-variant text-sm">${opt.sub}</span>` : ''}
+                            </div>
+                            <span class="font-label-sm text-label-sm text-primary font-bold">+$${opt.price.toFixed(2)}</span>
+                            ${isSelected ? '<span class="material-symbols-outlined text-primary ml-2" style="font-variation-settings: \'FILL\' 1;">check_circle</span>' : ''}
+                        </label>
+                    `;
+                });
+            }
+            contentHtml += `</div>`;
+            wizardContent.innerHTML = contentHtml;
+
+            updatePreview();
+            updatePricing();
+        }
+
+        window.handleSelection = (key, val, price, type) => {
+            if (type === 'radio') {
+                selections[key] = val;
+            } else {
+                const index = selections.toppings.indexOf(val);
+                if (index > -1) selections.toppings.splice(index, 1);
+                else selections.toppings.push(val);
+            }
+            updateUI();
+        };
+
+        function updatePreview() {
+            // Sauce Preview
+            const sauceEl = document.getElementById('preview-sauce');
+            sauceEl.style.opacity = selections.sauce !== 'None' ? '0.7' : '0';
+            
+            // Cheese Preview
+            const cheeseEl = document.getElementById('preview-cheese');
+            cheeseEl.style.opacity = selections.cheese !== 'None' ? '1' : '0';
+
+            // Toppings Preview Logic
+            const toppingsContainer = document.getElementById('preview-toppings');
+            toppingsContainer.innerHTML = '';
+            if (selections.toppings.length > 0) {
+                toppingsContainer.style.opacity = '1';
+                // Mock simple topping rendering
+                selections.toppings.forEach((top, i) => {
+                    for(let j=0; j<6; j++) {
+                        const dot = document.createElement('div');
+                        dot.className = "absolute w-6 h-6 rounded-full bg-orange-800 shadow-sm border border-black/10";
+                        dot.style.top = `${20 + Math.random() * 60}%`;
+                        dot.style.left = `${20 + Math.random() * 60}%`;
+                        dot.title = top;
+                        toppingsContainer.appendChild(dot);
+                    }
+                });
+            } else {
+                toppingsContainer.style.opacity = '0';
+            }
+        }
+
+        function updatePricing() {
+            let total = basePrice;
+            // Simplified calculation for demo
+            if (selections.crust === "Deep Dish") total += 2.50;
+            if (selections.crust === "Stuffed Crust") total += 3.00;
+            if (selections.sauce !== "Signature Red" && selections.sauce !== "None") total += 1.00;
+            total += (selections.toppings.length * 1.50);
+            
+            totalPriceEl.innerText = `$${total.toFixed(2)}`;
+            summaryText.innerText = `${selections.crust} • ${selections.sauce} • ${selections.cheese} ${selections.toppings.length ? '• ' + selections.toppings.join(', ') : ''}`;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateUI();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateUI();
+            }
+        });
+
+        // Initialize
+        updateUI();
+    </script>
+</body></html>

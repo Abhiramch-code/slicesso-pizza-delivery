@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PizzaSaaS - User Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface-variant": "#5d3f3e",
+                        "on-surface": "#1c1b1b",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#fd8100",
+                        "secondary-fixed": "#ffdcc6",
+                        "inverse-primary": "#ffb3b1",
+                        "secondary-fixed-dim": "#ffb785",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-variant": "#e5e2e1",
+                        "surface-bright": "#fcf9f8",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-primary-fixed-variant": "#92001d",
+                        "on-secondary-fixed-variant": "#723700",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#f0eded",
+                        "surface": "#fcf9f8",
+                        "surface-container-high": "#eae7e7",
+                        "outline-variant": "#e6bdbb",
+                        "primary-fixed": "#ffdad8",
+                        "on-tertiary-container": "#fbfbfb",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#e31837",
+                        "on-secondary-fixed": "#301400",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#313030",
+                        "secondary": "#954a00",
+                        "tertiary": "#5a5b5c",
+                        "background": "#fcf9f8",
+                        "surface-container-low": "#f6f3f2",
+                        "tertiary-container": "#727474",
+                        "primary": "#b90027",
+                        "on-primary-fixed": "#410007",
+                        "surface-dim": "#dcd9d9",
+                        "on-secondary-container": "#5d2c00",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fffaf9",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-error-container": "#93000a",
+                        "outline": "#916e6d",
+                        "surface-tint": "#bf0029",
+                        "surface-container-highest": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "button-text": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcf9f8;
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SideNavBar (Authority Source: JSON) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full z-40 bg-surface-container dark:bg-surface-container-highest border-r border-outline-variant w-60">
+<div class="p-6">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">Admin Panel</h1>
+<p class="text-on-surface-variant text-sm">Kitchen Dashboard</p>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<!-- Active State Logic: Mapping Dashboard to "Orders" for intent or custom mapping -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-bold transition-all duration-200 translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-sm text-label-sm">Notifications</span>
+</a>
+</nav>
+<div class="px-4 py-6 border-t border-outline-variant space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+<button class="w-full mt-4 bg-primary text-on-primary py-3 rounded-lg font-button-text text-button-text active:scale-95 duration-100">
+                Go Live
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-60 min-h-screen">
+<!-- TopAppBar (Authority Source: JSON) -->
+<header class="fixed top-0 right-0 left-0 md:left-60 z-30 h-16 bg-white/60 dark:bg-surface/60 backdrop-blur-md border-b border-white/10 shadow-sm flex justify-between items-center px-8">
+<div class="flex items-center gap-8">
+<div class="font-headline-lg text-headline-lg font-black text-primary italic">PizzaSaaS</div>
+<nav class="hidden lg:flex gap-6">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Menu</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Deals</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Track Order</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Locations</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-surface-container rounded-full px-4 py-2 text-sm w-64 focus:outline-none border-none" placeholder="Search orders..." type="text"/>
+</div>
+<button class="text-primary active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="text-primary active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<section class="pt-24 px-8 pb-12 max-w-[1200px] mx-auto space-y-10">
+<!-- Personalized Welcome Section -->
+<div class="relative h-[300px] rounded-3xl overflow-hidden flex items-end p-8 group">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A top-down gourmet shot of a fresh Margherita pizza with bubbling mozzarella, vibrant red tomato sauce, and emerald green basil leaves, set against a dark rustic wooden background with flour dusting. The lighting is warm and dramatic, highlighting the crispy leopard-spotted crust texture." src="https://lh3.googleusercontent.com/aida/AP1WRLu5ZmWCojdLMUp0P4Hl6LbpfkVlBQfZBDZ0JnjHPgWwkhBqfYLszrvfxhXHZSydMO5ci5W6MaIiu-1yPDLP14png8TMChEYGOWw28enuVFdpk0nEDyx4m_eY8s97lx9CCC5ll0K97DnZSrLUwmSoruEO5h15mdszO5Bq2JN7OZHKm6Az91W7niKMFQBAat7OPpDFGuWRX4JTnJeSNNerhqrSMYh5rO2Ibakoxve-pT6r9d5wXt2nDMQjIJv"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent"></div>
+<div class="relative z-10 text-white space-y-2">
+<h2 class="font-display-xl text-display-xl leading-none">Welcome back, Marco.</h2>
+<p class="font-body-md text-body-md opacity-90 max-w-lg">Your oven is hot and your favorite toppings are ready. Ready for your Friday night feast?</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Active Orders (Bento Style) -->
+<div class="lg:col-span-2 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-lg text-headline-lg">Active Orders</h3>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Live Status</span>
+</div>
+<div class="glass-card p-6 rounded-3xl shadow-sm border border-outline-variant/30 space-y-6">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile">The Spicy Salami XL</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Order #9821 • Est. 12 mins remaining</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="restaurant">restaurant</span>
+                                In Oven
+                            </div>
+</div>
+<!-- Custom Progress Bar -->
+<div class="space-y-4">
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%] rounded-full relative">
+<div class="absolute right-0 top-0 bottom-0 w-2 bg-white/40 animate-pulse"></div>
+</div>
+</div>
+<div class="flex justify-between font-label-sm text-[10px] uppercase text-on-surface-variant font-bold">
+<span>Prepared</span>
+<span class="text-primary">Baking</span>
+<span>Quality Check</span>
+<span>Out for Delivery</span>
+</div>
+</div>
+</div>
+<!-- Reward Points Tracker -->
+<div class="bg-primary-container p-8 rounded-3xl text-on-primary-container relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="absolute -right-10 -top-10 opacity-10">
+<span class="material-symbols-outlined text-[200px]" data-icon="star">star</span>
+</div>
+<div class="space-y-2 relative">
+<p class="font-label-sm text-label-sm opacity-80 uppercase tracking-widest">Loyalty Status</p>
+<h3 class="font-display-xl text-display-xl leading-none">2,450 Points</h3>
+<p class="font-body-md text-body-md opacity-90">Only 550 points until your next free Large Pizza!</p>
+</div>
+<button class="bg-on-primary-container text-primary-container px-8 py-4 rounded-2xl font-button-text text-button-text active:scale-95 transition-all relative z-10 shadow-lg">
+                            Redeem Rewards
+                        </button>
+</div>
+</div>
+<!-- Order Again Quick Actions -->
+<div class="space-y-6">
+<h3 class="font-headline-lg text-headline-lg">Order Again</h3>
+<div class="space-y-4">
+<!-- Quick Card 1 -->
+<div class="glass-card p-4 rounded-2xl flex items-center gap-4 group cursor-pointer hover:bg-white transition-colors duration-300">
+<div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A macro shot of a thin-crust mushroom and truffle oil pizza, focusing on the earthy tones of the fungi and the glistening truffle glaze. The aesthetic is clean, professional, and culinary-focused, emphasizing high-quality ingredients with a soft focus background." src="https://lh3.googleusercontent.com/aida/AP1WRLsk-948K7ZH1Ub21ZzeVBs7XW7NW4wDt6mFCdCHyxu8s-dNgWc1aPT5iVdGc0PqB4w5UfOnh2hmjkp_ujY20GtGiOhpKkGpS2VVNDXukZyCPbUuW9CoOBDz1MQJUnT6sdxexnOaH6hAQmoqK1m0j-O4d0R4aUlt8lhHvE-tmtM748OKqQ3sUo2TqQRRZLatzNihAsEUlANaG1vspTNQOfNm-ns27s7Wi7qXImY-WQwxEiKcc9D_81XQKLiP"/>
+</div>
+<div class="flex-1 min-w-0">
+<h5 class="font-headline-lg-mobile text-[16px] truncate">Truffle Forest</h5>
+<p class="text-on-surface-variant text-xs truncate">White sauce, Mushrooms, Herbs</p>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-all">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+<!-- Quick Card 2 -->
+<div class="glass-card p-4 rounded-2xl flex items-center gap-4 group cursor-pointer hover:bg-white transition-colors duration-300">
+<div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A close-up shot of a classic pepperoni pizza slice being lifted, with long, gooey strings of mozzarella cheese stretching from the crust. The lighting is high-key and bright, highlighting the oily sheen of the pepperoni and the golden-brown crust, evocative of a modern energetic food brand." src="https://lh3.googleusercontent.com/aida/AP1WRLt9wRRPfrg1XDDQ6vtchz_OUiXAwU-O2FQqGX0Kc-jRnMuFkOdlQhpOCWKZjVcaKFMeqql3xsDrMS6GtL1JKiens7jwkAr-Hi9ESbWtvD081phgH4KoNiHndEjyLV06nCQbFWpLPV1jK4GT5pVRXNEvr-jBsP58RBWakH4uXZxTqHXOfm3hj2Z3RGkvJv_CeX2CZ7j8RsFxv_ndykXIEk5xnoTL55bN2bH_YgcdLAv7DH_5ulFyYciBMI98"/>
+</div>
+<div class="flex-1 min-w-0">
+<h5 class="font-headline-lg-mobile text-[16px] truncate">Classic Double Pep</h5>
+<p class="text-on-surface-variant text-xs truncate">Extra Mozzarella, Pepperoni</p>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-all">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+<!-- Quick Card 3 -->
+<div class="glass-card p-4 rounded-2xl flex items-center gap-4 group cursor-pointer hover:bg-white transition-colors duration-300">
+<div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A vibrant vegetarian pizza featuring colorful bell peppers, red onions, black olives, and juicy cherry tomatoes on a cauliflower crust. The image is brightly lit with a clean, clinical yet appetizing software-interface style, using high-saturation colors to emphasize health and freshness." src="https://lh3.googleusercontent.com/aida/AP1WRLsuiPO8rcT6DHuxt3qXnGSPqSb7IoepGZ5QpiM6Aki9XGWcetnp2O5Ffo3ynxYqerw9Zo3flbXUerNS7JdQbLDmov2WCfLr-L1DxRtnSJ9LYRWVQ6JbTsApg7Od9u_D4OZ1QRUuQI1FJ0ojEidYRBninKdWj2WQcjz8XfO-I7L2cn2kEeOLa1ExbwBN8r0I0iKliTHZN_EJeJ7mbO0kz3HGJVj_7dfrrhmN8WmpgK29OqtG-uq2YkAvdXlI"/>
+</div>
+<div class="flex-1 min-w-0">
+<h5 class="font-headline-lg-mobile text-[16px] truncate">Garden Special</h5>
+<p class="text-on-surface-variant text-xs truncate">Veggies, Pesto Base</p>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-all">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+<button class="w-full py-4 rounded-2xl border-2 border-dashed border-outline-variant text-on-surface-variant font-button-text text-button-text hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                            View All Past Builds
+                        </button>
+</div>
+</div>
+</div>
+<!-- Promotion Bento Piece -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="md:col-span-1 glass-card p-6 rounded-3xl flex flex-col justify-between border-primary/20">
+<span class="material-symbols-outlined text-primary text-[40px]" data-icon="local_fire_department">local_fire_department</span>
+<div>
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile">Hot Deals</h4>
+<p class="text-on-surface-variant font-body-md text-sm">20% off all XL pizzas today.</p>
+</div>
+</div>
+<div class="md:col-span-3 h-[200px] rounded-3xl overflow-hidden relative">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="A sleek fleet of branded red delivery mopeds parked in front of a modern, glass-fronted pizza restaurant at dusk. The lighting is cool-toned blue for the atmosphere with warm orange interior lights leaking out, creating a high-end SaaS platform feel that is professional and organized." src="https://lh3.googleusercontent.com/aida/AP1WRLvGH4BXwfPlOQLDtYS5Mxs9g4TQGZ3D0GFnP1ywLlNxEnYdd4s_xVIbpy5ddVjZYVIQRSKODMB6MOhlbm0tQxzcaBct4J607Wsvw0z7zvjwxA7vmfZA8E8w32pIFbZEyJsbUxQbsCbbm_LQy_MUGRAQ3Wxo13BbpVQPTL4Jtx7VZ2ZsRt0L4UhSsMIRlM6UQtRKtAgyjHiBfh8gmrv74Lk_ZdCGM3D3CSXC_hxtky1uarJBkoUi_IjK6DNy"/>
+<div class="absolute inset-0 bg-primary/20 backdrop-overlay"></div>
+<div class="absolute inset-0 flex items-center px-12">
+<div class="text-white">
+<h4 class="font-headline-lg text-headline-lg">Priority Delivery</h4>
+<p class="font-body-md text-body-md">Subscribers get first-in-oven priority.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer (Authority Source: JSON) -->
+<footer class="w-full py-8 px-8 flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest border-t border-outline-variant">
+<div class="font-headline-lg text-headline-lg font-extrabold text-primary mb-4 md:mb-0">PizzaSaaS</div>
+<div class="flex gap-8 mb-4 md:mb-0">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Privacy Policy</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Terms of Service</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Contact Us</a>
+</div>
+<p class="text-on-tertiary-fixed-variant font-label-sm text-label-sm">
+                © 2024 PizzaSaaS Kitchen Systems. All rights reserved.
+            </p>
+</footer>
+</main>
+<!-- FAB Suppression Rule: Not rendered on Dashboard/Details as per instructions, but adding one here if it was Home. Since this is a Dashboard (Orders/Kitchen view), we adhere to the specific mapping. -->
+<script>
+        // Micro-interactions for the progress bar
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.querySelector('.bg-primary.h-full');
+            if (progressBar) {
+                setTimeout(() => {
+                    progressBar.style.transition = 'width 2s cubic-bezier(0.4, 0, 0.2, 1)';
+                    progressBar.style.width = '72%';
+                }, 1000);
+            }
+        });
+    </script>
+</body></html>

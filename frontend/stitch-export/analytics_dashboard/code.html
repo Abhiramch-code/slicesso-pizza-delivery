@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PizzaSaaS Admin Panel - Analytics Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface-variant": "#5d3f3e",
+                        "on-surface": "#1c1b1b",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#fd8100",
+                        "secondary-fixed": "#ffdcc6",
+                        "inverse-primary": "#ffb3b1",
+                        "secondary-fixed-dim": "#ffb785",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-variant": "#e5e2e1",
+                        "surface-bright": "#fcf9f8",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-primary-fixed-variant": "#92001d",
+                        "on-secondary-fixed-variant": "#723700",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#f0eded",
+                        "surface": "#fcf9f8",
+                        "surface-container-high": "#eae7e7",
+                        "outline-variant": "#e6bdbb",
+                        "primary-fixed": "#ffdad8",
+                        "on-tertiary-container": "#fbfbfb",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#e31837",
+                        "on-secondary-fixed": "#301400",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#313030",
+                        "secondary": "#954a00",
+                        "tertiary": "#5a5b5c",
+                        "background": "#fcf9f8",
+                        "surface-container-low": "#f6f3f2",
+                        "tertiary-container": "#727474",
+                        "primary": "#b90027",
+                        "on-primary-fixed": "#410007",
+                        "surface-dim": "#dcd9d9",
+                        "on-secondary-container": "#5d2c00",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fffaf9",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-error-container": "#93000a",
+                        "outline": "#916e6d",
+                        "surface-tint": "#bf0029",
+                        "surface-container-highest": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "button-text": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #fcf9f8; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-bar { transition: height 1s ease-out; }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full z-40 bg-surface-container dark:bg-surface-container-highest border-r border-outline-variant w-60">
+<div class="p-8">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">Admin Panel</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Kitchen Dashboard</p>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg font-medium group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg font-medium group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</a>
+<!-- Active Tab: Analytics -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-bold translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg font-medium group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">notifications</span>
+<span class="font-label-sm text-label-sm">Notifications</span>
+</a>
+</nav>
+<div class="px-6 py-4">
+<button class="w-full py-3 bg-primary text-on-primary rounded-lg font-button-text text-button-text shadow-sm active:scale-95 transition-transform">
+                Go Live
+            </button>
+</div>
+<div class="mt-auto border-t border-outline-variant p-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-60 min-h-screen p-margin-mobile md:p-margin-desktop pb-32">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Analytics Deep Dive</h2>
+<p class="text-on-surface-variant">Monitoring real-time kitchen efficiency and market trends.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex bg-surface-container-high p-1 rounded-lg">
+<button class="px-4 py-1.5 rounded-md bg-white shadow-sm text-sm font-semibold">Today</button>
+<button class="px-4 py-1.5 rounded-md text-sm font-medium text-on-surface-variant">Weekly</button>
+<button class="px-4 py-1.5 rounded-md text-sm font-medium text-on-surface-variant">Monthly</button>
+</div>
+<button class="p-2.5 bg-surface-container-highest rounded-lg text-on-surface hover:bg-outline-variant transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</header>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Sales KPI -->
+<div class="glass-card p-6 rounded-xl relative overflow-hidden group">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Net Sales</p>
+<h3 class="font-headline-lg text-headline-lg mt-1">$42,910</h3>
+</div>
+<div class="p-2 bg-primary-container text-on-primary-container rounded-lg">
+<span class="material-symbols-outlined">payments</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-1 text-green-600 font-medium">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="text-xs">+12.5% vs yesterday</span>
+</div>
+</div>
+<!-- Orders KPI -->
+<div class="glass-card p-6 rounded-xl">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Active Orders</p>
+<h3 class="font-headline-lg text-headline-lg mt-1">156</h3>
+</div>
+<div class="p-2 bg-secondary-container text-on-secondary-container rounded-lg">
+<span class="material-symbols-outlined">local_pizza</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-1 text-primary font-medium">
+<span class="material-symbols-outlined text-sm">priority_high</span>
+<span class="text-xs">Peak demand starting</span>
+</div>
+</div>
+<!-- Efficiency KPI -->
+<div class="glass-card p-6 rounded-xl">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Avg Delivery</p>
+<h3 class="font-headline-lg text-headline-lg mt-1">24m</h3>
+</div>
+<div class="p-2 bg-tertiary-container text-on-tertiary-container rounded-lg">
+<span class="material-symbols-outlined">speed</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-1 text-green-600 font-medium">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+<span class="text-xs">-3m faster than avg</span>
+</div>
+</div>
+<!-- Retention KPI -->
+<div class="glass-card p-6 rounded-xl">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Growth</p>
+<h3 class="font-headline-lg text-headline-lg mt-1">84%</h3>
+</div>
+<div class="p-2 bg-surface-container-highest text-on-surface rounded-lg">
+<span class="material-symbols-outlined">group_add</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-sm">stars</span>
+<span class="text-xs">4.8k New users</span>
+</div>
+</div>
+</div>
+<!-- Charts Layout (Bento Grid) -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Sales Trends (8 Col) -->
+<div class="col-span-12 lg:col-span-8 glass-card rounded-xl p-8">
+<div class="flex justify-between items-center mb-10">
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Revenue Forecast</h4>
+<div class="flex gap-4 items-center">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-xs font-medium">Actual</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-outline-variant"></span>
+<span class="text-xs font-medium">Projected</span>
+</div>
+</div>
+</div>
+<div class="relative h-64 flex items-end justify-between gap-4">
+<!-- Simple Bar Chart Visualization -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container rounded-t-lg relative group">
+<div class="chart-bar absolute bottom-0 w-full bg-primary opacity-20 rounded-t-lg h-[40%] group-hover:opacity-40 transition-opacity"></div>
+<div class="chart-bar absolute bottom-0 w-full bg-primary rounded-t-lg h-[25%]"></div>
+</div>
+<span class="font-label-sm text-label-sm opacity-50">Mon</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container rounded-t-lg relative group">
+<div class="chart-bar absolute bottom-0 w-full bg-primary opacity-20 rounded-t-lg h-[55%] group-hover:opacity-40 transition-opacity"></div>
+<div class="chart-bar absolute bottom-0 w-full bg-primary rounded-t-lg h-[40%]"></div>
+</div>
+<span class="font-label-sm text-label-sm opacity-50">Tue</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container rounded-t-lg relative group">
+<div class="chart-bar absolute bottom-0 w-full bg-primary opacity-20 rounded-t-lg h-[45%] group-hover:opacity-40 transition-opacity"></div>
+<div class="chart-bar absolute bottom-0 w-full bg-primary rounded-t-lg h-[35%]"></div>
+</div>
+<span class="font-label-sm text-label-sm opacity-50">Wed</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full h-full bg-surface-container rounded-t-lg relative group">
+<div class="chart-bar absolute bottom-0 w-full bg-primary opacity-20 rounded-t-lg h-[85%] group-hover:opacity-40 transition-opacity"></div>
+<div class="chart-bar absolute bottom-0 w-full bg-primary rounded-t-lg h-[70%]"></div>
+</div>
+<span class="font-label-sm text-label-sm opacity-50">Thu</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container rounded-t-lg relative group">
+<div class="chart-bar absolute bottom-0 w-full bg-primary opacity-20 rounded-t-lg h-[95%] group-hover:opacity-40 transition-opacity"></div>
+<div class="chart-bar absolute bottom-0 w-full bg-primary rounded-t-lg h-[80%]"></div>
+</div>
+<span class="font-label-sm text-label-sm opacity-50 text-primary font-bold">Fri</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container rounded-t-lg relative group">
+<div class="chart-bar absolute bottom-0 w-full bg-primary opacity-20 rounded-t-lg h-[60%] group-hover:opacity-40 transition-opacity"></div>
+<div class="chart-bar absolute bottom-0 w-full bg-primary rounded-t-lg h-[50%]"></div>
+</div>
+<span class="font-label-sm text-label-sm opacity-50">Sat</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container rounded-t-lg relative group">
+<div class="chart-bar absolute bottom-0 w-full bg-primary opacity-20 rounded-t-lg h-[50%] group-hover:opacity-40 transition-opacity"></div>
+<div class="chart-bar absolute bottom-0 w-full bg-primary rounded-t-lg h-[40%]"></div>
+</div>
+<span class="font-label-sm text-label-sm opacity-50">Sun</span>
+</div>
+</div>
+</div>
+<!-- Popular Combinations (4 Col) -->
+<div class="col-span-12 lg:col-span-4 glass-card rounded-xl p-6">
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-6">Top Combinations</h4>
+<div class="space-y-4">
+<div class="flex items-center gap-4 group">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a steaming hot pepperoni pizza with melting mozzarella cheese and crispy burnt edges. The lighting is warm and cinematic, highlighting the vibrant red of the pepperoni against the golden crust. The mood is appetizing and high-energy, perfect for a modern pizza SaaS brand aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLvG1JfatGx7MCrOFOGZPfBdF5i5hf_4yzedq64Zx_lHM8-2hlNkkDw7l196KmgIBO0t0ttSHpeIwicJNNLoj3IHKcB7l9uKjcuFD7vGgUqx3ZZ97MVJm7pxIWpj9L-d6IRZQxArFbfAggAIo8YMBcwuqO77JFyC1gPPE1gWixhHuyntSGot8tQyFl-uIuDKe82P7EK-sLnZiwL6VfdHzallOQpirOpz1yZ5XhBCBIztSrAeVeMJbkAHSPgl"/>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-sm">Pepperoni + Jalapeño</p>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-1.5 overflow-hidden">
+<div class="bg-primary h-full w-[88%] rounded-full"></div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm font-bold">2.4k</span>
+</div>
+<div class="flex items-center gap-4 group">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A overhead perspective of a fresh Margherita pizza garnished with bright green basil leaves and creamy rounds of buffalo mozzarella. The image is bright and clean with a high-key lighting setup that emphasizes the freshness of the ingredients. The aesthetic is professional and modern, aligning with a high-end food delivery service." src="https://lh3.googleusercontent.com/aida/AP1WRLsGI8xybyDpts4Jro6ikSInBcHJ76J0lzz_Txw0jb_WZ6YYAKHzrpPiunyE7wGL4QhQ44U6C9pv0TAWu9YViYGjEUx1xG2Jx_hTg_9BBqCKCQhDtQyUmezam2LSHKWVHyS5phXk9C5xt_SuU-CSZAh-JmbedbBcpmtkXnlAF7MgU1NxhBNSgLcFOIb1QI1WN85-gKGuJfJLz4R7Pt1wPp4E8QeA_mMHHWCsR0l4XoPM3Da514ZGeQsVZ4qG"/>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-sm">Margherita + Truffle</p>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-1.5 overflow-hidden">
+<div class="bg-secondary-container h-full w-[65%] rounded-full"></div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm font-bold">1.8k</span>
+</div>
+<div class="flex items-center gap-4 group">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up image of a gourmet BBQ chicken pizza with red onions and cilantro sprinkles. The dark, rich barbecue sauce contrasts beautifully against the white cheese. The lighting is focused and dramatic, giving the pizza a premium look suitable for an expert admin dashboard visualization." src="https://lh3.googleusercontent.com/aida/AP1WRLsmjbeAz1e4dOfIdEUfuz-xsy7xrqXOxxZoNNorms3fd-vn3oWkFb3aTxbVEvNIxQmHVWmPlUi-Bj68A0sWZy7iHPF0xH6UOZz6ExGA57ivA7INLyIZ1kD-M04QVhggLZVPvTIHulhlLz_tHO1EDUL1ZLW8aeCQl5XKO4x_XLJ9LPxFa8AA5nBUl0JWRJvztYOQqbf27eJ390FpsyLzoGcy2LBsBujHGbchtniU_Z7wxBswGVTgNlr_7Syu"/>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-sm">BBQ Chicken + Onion</p>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-1.5 overflow-hidden">
+<div class="bg-tertiary-container h-full w-[42%] rounded-full"></div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm font-bold">1.1k</span>
+</div>
+</div>
+<button class="w-full mt-6 py-2.5 border border-outline-variant rounded-lg font-button-text text-button-text text-on-surface-variant hover:bg-surface-container-high transition-all">
+                    View All Recipes
+                </button>
+</div>
+<!-- Delivery Performance Heatmap (12 Col) -->
+<div class="col-span-12 glass-card rounded-xl p-8 relative min-h-[400px] overflow-hidden">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 z-10 relative">
+<div>
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Delivery Velocity Heatmap</h4>
+<p class="text-on-surface-variant text-sm">Real-time congestion mapping across city sectors</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium">Slow</span>
+<div class="w-32 h-2 rounded-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-600"></div>
+<span class="text-xs font-medium">Congested</span>
+</div>
+</div>
+</div>
+<!-- Abstract Map/Heatmap Visual -->
+<div class="absolute inset-0 top-24 pointer-events-none opacity-40">
+<div class="w-full h-full relative" data-location="Chicago" style="">
+<div class="absolute top-[20%] left-[30%] w-32 h-32 bg-red-600 rounded-full blur-3xl opacity-60"></div>
+<div class="absolute top-[40%] left-[60%] w-48 h-48 bg-yellow-400 rounded-full blur-3xl opacity-40"></div>
+<div class="absolute top-[10%] left-[70%] w-24 h-24 bg-green-400 rounded-full blur-3xl opacity-50"></div>
+<div class="absolute top-[60%] left-[10%] w-40 h-40 bg-red-500 rounded-full blur-3xl opacity-40"></div>
+</div>
+</div>
+<div class="relative grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+<div class="bg-white/40 backdrop-blur-md border border-white/20 p-5 rounded-lg">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+<span class="font-bold text-sm">Zone A: Downtown</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg Delivery: <span class="text-red-600">42m</span></p>
+<p class="text-xs text-on-surface-variant mt-1">Status: Extreme Congestion</p>
+</div>
+<div class="bg-white/40 backdrop-blur-md border border-white/20 p-5 rounded-lg">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+<span class="font-bold text-sm">Zone B: River North</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg Delivery: <span class="text-yellow-600">28m</span></p>
+<p class="text-xs text-on-surface-variant mt-1">Status: Moderate Load</p>
+</div>
+<div class="bg-white/40 backdrop-blur-md border border-white/20 p-5 rounded-lg">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="font-bold text-sm">Zone C: South Side</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg Delivery: <span class="text-green-600">18m</span></p>
+<p class="text-xs text-on-surface-variant mt-1">Status: Clear Operations</p>
+</div>
+</div>
+</div>
+<!-- Customer Growth & Tables (12 Col) -->
+<div class="col-span-12 glass-card rounded-xl overflow-hidden">
+<div class="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest/30">
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Live Order Stream</h4>
+<span class="font-label-sm text-label-sm text-primary bg-primary-container px-3 py-1 rounded-full">32 Orders Processing</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-8 py-4 font-label-sm text-label-sm text-on-surface-variant">Order ID</th>
+<th class="px-8 py-4 font-label-sm text-label-sm text-on-surface-variant">Customer</th>
+<th class="px-8 py-4 font-label-sm text-label-sm text-on-surface-variant">Items</th>
+<th class="px-8 py-4 font-label-sm text-label-sm text-on-surface-variant">Status</th>
+<th class="px-8 py-4 font-label-sm text-label-sm text-on-surface-variant">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-secondary/5 transition-colors">
+<td class="px-8 py-4 font-label-sm text-label-sm">#PX-90421</td>
+<td class="px-8 py-4 font-medium">Marco Rossi</td>
+<td class="px-8 py-4 text-on-surface-variant">2x Large Pepperoni, 1x Garlic Knots</td>
+<td class="px-8 py-4">
+<span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full font-label-sm text-[10px] uppercase font-bold">In Oven</span>
+</td>
+<td class="px-8 py-4">
+<button class="text-primary hover:underline font-button-text text-button-text">Track</button>
+</td>
+</tr>
+<tr class="hover:bg-secondary/5 transition-colors">
+<td class="px-8 py-4 font-label-sm text-label-sm">#PX-90422</td>
+<td class="px-8 py-4 font-medium">Sarah Jenkins</td>
+<td class="px-8 py-4 text-on-surface-variant">1x Margherita (Gluten Free)</td>
+<td class="px-8 py-4">
+<span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-label-sm text-[10px] uppercase font-bold">Ready</span>
+</td>
+<td class="px-8 py-4">
+<button class="text-primary hover:underline font-button-text text-button-text">Assign</button>
+</td>
+</tr>
+<tr class="hover:bg-secondary/5 transition-colors">
+<td class="px-8 py-4 font-label-sm text-label-sm">#PX-90423</td>
+<td class="px-8 py-4 font-medium">Liam O'Connor</td>
+<td class="px-8 py-4 text-on-surface-variant">3x BBQ Chicken, 2x Soda</td>
+<td class="px-8 py-4">
+<span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-label-sm text-[10px] uppercase font-bold">Delivered</span>
+</td>
+<td class="px-8 py-4">
+<button class="text-primary hover:underline font-button-text text-button-text">Details</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="md:ml-60 w-auto py-8 px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest dark:bg-surface-dim border-t border-outline-variant">
+<div class="flex items-center gap-2 mb-4 md:mb-0">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary italic">PizzaSaaS</span>
+</div>
+<div class="flex flex-col items-center md:items-end gap-2">
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Contact Us</a>
+</div>
+<p class="font-label-sm text-label-sm text-on-tertiary-fixed-variant opacity-60">© 2024 PizzaSaaS Kitchen Systems. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Micro-interactions for chart bars
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach(bar => {
+                const height = bar.style.height;
+                bar.style.height = '0px';
+                setTimeout(() => {
+                    bar.style.height = height;
+                }, 300);
+            });
+        });
+    </script>
+</body></html>

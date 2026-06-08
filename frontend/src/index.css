@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tertiary-fixed: #e2e2e2;
+  --color-on-surface-variant: #5d3f3e;
+  --color-on-surface: #1c1b1b;
+  --color-tertiary-fixed-dim: #c6c6c7;
+  --color-surface-container-lowest: #ffffff;
+  --color-secondary-container: #fd8100;
+  --color-secondary-fixed: #ffdcc6;
+  --color-inverse-primary: #ffb3b1;
+  --color-secondary-fixed-dim: #ffb785;
+  --color-on-tertiary-fixed: #1a1c1c;
+  --color-surface-variant: #e5e2e1;
+  --color-surface-bright: #fcf9f8;
+  --color-on-tertiary-fixed-variant: #454747;
+  --color-on-primary-fixed-variant: #92001d;
+  --color-on-secondary-fixed-variant: #723700;
+  --color-on-error: #ffffff;
+  --color-on-tertiary: #ffffff;
+  --color-surface-container: #f0eded;
+  --color-surface: #fcf9f8;
+  --color-surface-container-high: #eae7e7;
+  --color-outline-variant: #e6bdbb;
+  --color-primary-fixed: #ffdad8;
+  --color-on-tertiary-container: #fbfbfb;
+  --color-error-container: #ffdad6;
+  --color-primary-container: #e31837;
+  --color-on-secondary-fixed: #301400;
+  --color-on-primary: #ffffff;
+  --color-primary-fixed-dim: #ffb3b1;
+  --color-on-background: #1c1b1b;
+  --color-on-secondary: #ffffff;
+  --color-inverse-surface: #313030;
+  --color-secondary: #954a00;
+  --color-tertiary: #5a5b5c;
+  --color-background: #fcf9f8;
+  --color-surface-container-low: #f6f3f2;
+  --color-tertiary-container: #727474;
+  --color-primary: #b90027;
+  --color-on-primary-fixed: #410007;
+  --color-surface-dim: #dcd9d9;
+  --color-on-secondary-container: #5d2c00;
+  --color-error: #ba1a1a;
+  --color-on-primary-container: #fffaf9;
+  --color-inverse-on-surface: #f3f0ef;
+  --color-on-error-container: #93000a;
+  --color-outline: #916e6d;
+  --color-surface-tint: #bf0029;
+  --color-surface-container-highest: #e5e2e1;
+
+  --spacing-unit: 4px;
+  --spacing-margin-mobile: 16px;
+  --spacing-margin-desktop: 32px;
+  --spacing-container-max: 1440px;
+  --spacing-gutter: 16px;
+
+  --font-label-sm: JetBrains Mono, monospace;
+  --font-body-md: Inter, sans-serif;
+  --font-headline-lg: Inter, sans-serif;
+  --font-display-xl: Inter, sans-serif;
+  --font-headline-lg-mobile: Inter, sans-serif;
+  --font-button-text: Inter, sans-serif;
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  .pizza-hero-gradient {
+    background: linear-gradient(to right, rgba(28, 27, 27, 0.4), transparent);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

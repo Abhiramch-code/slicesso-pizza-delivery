@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PizzaSaaS Admin | Inventory Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface-variant": "#5d3f3e",
+                        "on-surface": "#1c1b1b",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#fd8100",
+                        "secondary-fixed": "#ffdcc6",
+                        "inverse-primary": "#ffb3b1",
+                        "secondary-fixed-dim": "#ffb785",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-variant": "#e5e2e1",
+                        "surface-bright": "#fcf9f8",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-primary-fixed-variant": "#92001d",
+                        "on-secondary-fixed-variant": "#723700",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#f0eded",
+                        "surface": "#fcf9f8",
+                        "surface-container-high": "#eae7e7",
+                        "outline-variant": "#e6bdbb",
+                        "primary-fixed": "#ffdad8",
+                        "on-tertiary-container": "#fbfbfb",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#e31837",
+                        "on-secondary-fixed": "#301400",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#313030",
+                        "secondary": "#954a00",
+                        "tertiary": "#5a5b5c",
+                        "background": "#fcf9f8",
+                        "surface-container-low": "#f6f3f2",
+                        "tertiary-container": "#727474",
+                        "primary": "#b90027",
+                        "on-primary-fixed": "#410007",
+                        "surface-dim": "#dcd9d9",
+                        "on-secondary-container": "#5d2c00",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fffaf9",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-error-container": "#93000a",
+                        "outline": "#916e6d",
+                        "surface-tint": "#bf0029",
+                        "surface-container-highest": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "button-text": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "button-text": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full z-40 bg-surface-container dark:bg-surface-container-highest border-r border-outline-variant w-60">
+<div class="p-6">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">Admin Panel</h1>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Kitchen Dashboard</p>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg font-medium group" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-bold translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg font-medium group" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg font-medium group" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm">Notifications</span>
+</a>
+</nav>
+<div class="px-4 py-6 border-t border-outline-variant space-y-2">
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-button-text text-button-text hover:brightness-110 active:scale-95 transition-all">
+                Go Live
+            </button>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="md:ml-60 min-h-screen relative">
+<!-- Background Decor -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute top-1/2 -left-24 w-64 h-64 bg-secondary/5 rounded-full blur-3xl"></div>
+</div>
+<!-- TopNavBar (Simulated for Admin context) -->
+<header class="sticky top-0 z-30 glass-panel h-16 flex justify-between items-center px-margin-desktop border-b border-white/10 shadow-sm">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-lg text-headline-lg font-black text-primary italic">PizzaSaaS</h2>
+<div class="h-6 w-px bg-outline-variant mx-2"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Inventory Control</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block">
+<input class="bg-surface-container-low border-none rounded-full px-10 py-2 text-body-md focus:ring-2 focus:ring-primary/20 w-64 transition-all" placeholder="Search inventory..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+</div>
+<button class="material-symbols-outlined text-primary">account_circle</button>
+</div>
+</header>
+<section class="p-margin-desktop relative z-10">
+<!-- Quick Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-margin-desktop">
+<div class="glass-card p-6 rounded-xl flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Total SKU Items</span>
+<div class="flex items-end justify-between">
+<span class="font-display-xl text-display-xl text-on-surface">142</span>
+<span class="bg-primary/10 text-primary px-2 py-1 rounded font-label-sm text-label-sm">+4 this week</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl border-l-4 border-error">
+<span class="font-label-sm text-label-sm text-error font-bold">Low Stock Alerts</span>
+<div class="flex items-end justify-between mt-2">
+<span class="font-display-xl text-display-xl text-error">12</span>
+<span class="material-symbols-outlined text-error text-3xl">warning</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl border-l-4 border-secondary">
+<span class="font-label-sm text-label-sm text-secondary font-bold">Pending Orders</span>
+<div class="flex items-end justify-between mt-2">
+<span class="font-display-xl text-display-xl text-secondary">08</span>
+<span class="material-symbols-outlined text-secondary text-3xl">local_shipping</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Inventory Value</span>
+<div class="flex items-end justify-between mt-2">
+<span class="font-display-xl text-display-xl text-on-surface">$14.2k</span>
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">account_balance_wallet</span>
+</div>
+</div>
+</div>
+<!-- Main Inventory Table -->
+<div class="glass-card rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-5 flex justify-between items-center border-b border-outline-variant">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold">Ingredient List</h3>
+<div class="flex gap-3">
+<button class="px-4 py-2 rounded-lg border border-outline text-on-surface font-button-text text-button-text hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-body-md">filter_list</span>
+                            Filter
+                        </button>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary font-button-text text-button-text hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-body-md">add</span>
+                            Add New
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4">Item ID</th>
+<th class="px-6 py-4">Ingredient Name</th>
+<th class="px-6 py-4">Current Stock</th>
+<th class="px-6 py-4">Supplier</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-md">
+<!-- Low Stock Row -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 font-label-sm text-label-sm text-tertiary">#PZP-001</td>
+<td class="px-6 py-4 font-bold flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A macro close-up of premium, thinly sliced pepperoni layered on a clean white kitchen surface. The lighting is bright and professional, highlighting the rich textures and oily sheen of the meat. The aesthetic is clean and organized, aligning with a high-end food-tech SaaS application that emphasizes product quality and freshness." src="https://lh3.googleusercontent.com/aida/AP1WRLsZfnC84nFxrodPJFDWcqo-vLYnZ8lHQhMjAksE3BtnM0uUgdWVzxjbr8ToBOXWYwAohb0SqV1wTrtpAG_-eu1aKDitJW6TESwkSkHiWVRTI5gIhxCgqKHGO7OcWcI6dB_4CZbu54xCciard582xw5fccSwOCjcpBNQqBVErNVK-I-dP4TEnu1BtdiQlw9UdPLj2eP1RLMpf_a1Xc9-Q_eFAKqF3D9j5Fb0HsW9ymLhUoeHaZe5FEwYgJA"/>
+</div>
+                                    Mozzarella Cheese (Premium)
+                                </td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="font-bold text-error">12.5 kg</span>
+<div class="w-24 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="bg-error h-full w-[15%]"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">Milano Dairy Corp</td>
+<td class="px-6 py-4">
+<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 w-fit">
+<span class="material-symbols-outlined text-[14px]">warning</span> Critical
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline font-button-text text-button-text">Restock</button>
+</td>
+</tr>
+<!-- Warning Stock Row -->
+<tr class="hover:bg-secondary/5 transition-colors group">
+<td class="px-6 py-4 font-label-sm text-label-sm text-tertiary">#PZP-042</td>
+<td class="px-6 py-4 font-bold flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A collection of vibrant, fresh organic cherry tomatoes in various shades of red and orange, arranged artistically in a wooden bowl. Soft, diffused natural light creates a warm and appetizing atmosphere. The visual style is high-definition and modern, emphasizing the farm-to-table freshness required for a premium pizza kitchen dashboard." src="https://lh3.googleusercontent.com/aida/AP1WRLvB9db3JKQA8mFHPaMFQ6zabGBvCp_QFKM6hFUfvPsAXvK4hBeveiaZG04PdsWSkS6ea5fAa4FDCAi5YVnCH4kmzDaHKyMdtkE5xV1XHzP2wkAgoMpgDInGyHHKismMuMRjVx9rSkXdpWXXvnsZDwILLNmqeXOjp8AJtsuqqQsVtlHtUBMZa1lFwEjvBVkirYQFZXXCWOPKa7HhAV7aKKIX8iqmxZbOEqttn9rmOP4x8i3uTC7_fhWU4H0H"/>
+</div>
+                                    Cherry Tomatoes
+                                </td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="font-bold text-secondary">45.0 kg</span>
+<div class="w-24 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[40%]"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">Green Harvest Farms</td>
+<td class="px-6 py-4">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 w-fit">
+<span class="material-symbols-outlined text-[14px]">info</span> Low Stock
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary font-bold hover:underline font-button-text text-button-text">Order Now</button>
+</td>
+</tr>
+<!-- Healthy Stock Row -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4 font-label-sm text-label-sm text-tertiary">#PZP-108</td>
+<td class="px-6 py-4 font-bold flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist shot of high-quality '00' flour being poured slowly into a stainless steel bowl. The environment is a clinical, professional kitchen with bright, high-key lighting. The focus is on the fine texture and purity of the flour, capturing the professional and artisanal standards of the PizzaSaaS brand identity." src="https://lh3.googleusercontent.com/aida/AP1WRLsaqYBzz-hVSBRDarKDkvJhcAqcp5GKecD8d2lvQPdJVSjlGdC3YTbO033aISMp3zwdM_CDLZSqjIlwpFJBuHgXwKoC9yzuk0lM8Yg1RhOwfMm4oUYNexn2o8FRShHUpwvcxOQqmgFCL-XT7HDiRrmSIle6537DTNiUPoxgoRKBSU5NVwaSZywoQP5WumQXoslwhPPbjXJUte5T4mqGudKkVQPppyagHXvfOFfEdMAiAQNIljwPozhqT42v"/>
+</div>
+                                    Pizza Flour (Type 00)
+                                </td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="font-bold text-on-surface">420.0 kg</span>
+<div class="w-24 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[85%]"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">EuroMill Imports</td>
+<td class="px-6 py-4">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 w-fit">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Sufficient
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant font-medium hover:text-primary transition-colors font-button-text text-button-text">Edit SKU</button>
+</td>
+</tr>
+<!-- Healthy Stock Row -->
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-4 font-label-sm text-label-sm text-tertiary">#PZP-012</td>
+<td class="px-6 py-4 font-bold flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A collection of glossy, high-quality black olives and fresh basil leaves arranged on a sleek slate platter. The lighting is moody yet bright enough to show the glistening texture of the olives. This image represents the premium ingredients monitored by the SaaS system, maintaining an energetic yet professional aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLs6YpVCbOs2Snngs_-nHvtFgXy7ebQBT6_Un1xFYNUbAQn9LUpWJL-wjqNXeAc2DXLd5J06O9kz_jaZGM5wD16h-EX7bKhkiNTMRHbtU2nlsRbRoj2M7gz7OGdsNGu1OS8gQC7K8-bHUnq4lCsC-F-SU9TRHWdaiT7a3l0Av3tukDYH_FQMOPi85Ss2lPtJT9KRFIXOjGtW5bWflWHFA02DHAB3cbo-RYCjke_Z5FpgNuBBqAfjDz_qgMlA"/>
+</div>
+                                    Black Olives
+                                </td>
+<td class="px-6 py-4">
+<div class="flex flex-col gap-1">
+<span class="font-bold text-on-surface">88.5 kg</span>
+<div class="w-24 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[70%]"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">Green Harvest Farms</td>
+<td class="px-6 py-4">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 w-fit">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Sufficient
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-on-surface-variant font-medium hover:text-primary transition-colors font-button-text text-button-text">Edit SKU</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer Pagination -->
+<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center border-t border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Showing 1-10 of 142 ingredients</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-on-primary font-bold">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Shell -->
+<footer class="w-full py-8 px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container-lowest dark:bg-surface-dim border-t border-outline-variant">
+<div class="flex flex-col gap-1 items-center md:items-start mb-4 md:mb-0">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary">PizzaSaaS</span>
+<p class="font-label-sm text-label-sm text-on-tertiary-fixed-variant">© 2024 PizzaSaaS Kitchen Systems. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Privacy Policy</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Terms of Service</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Contact Us</a>
+</div>
+</footer>
+</main>
+<!-- Mobile Navigation (Simulated Bottom Bar) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full glass-panel h-16 flex justify-around items-center z-50 border-t border-white/10">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] font-bold">Orders</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="text-[10px] font-bold">Stock</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-bold">Stats</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-[10px] font-bold">Alerts</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for hover effects and active states
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.add('scale-[0.99]');
+                setTimeout(() => row.classList.remove('scale-[0.99]'), 100);
+            });
+        });
+
+        // Add glassmorphic float effect on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>
