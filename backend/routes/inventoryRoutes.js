@@ -9,6 +9,7 @@ const {
   restockItem,
   getTransactions,
   getAnalytics,
+  getForecast,
 } = require('../controllers/inventoryController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -18,6 +19,7 @@ router.use(authorize('admin'));
 
 router.get('/transactions', getTransactions);
 router.get('/analytics', getAnalytics);
+router.get('/forecast', getForecast);
 
 router.route('/')
   .get(getInventory)

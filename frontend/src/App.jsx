@@ -17,9 +17,11 @@ import Checkout from './pages/user/Checkout';
 import Orders from './pages/user/Orders';
 import UserDashboard from './pages/user/UserDashboard';
 import Profile from './pages/user/Profile';
+import Menu from './pages/user/Menu';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import InventoryManagement from './pages/admin/InventoryManagement';
 import AdminAnalytics from './pages/admin/AdminAnalytics';
+import CouponManagement from './pages/admin/CouponManagement';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -40,6 +42,7 @@ function App() {
         <Route element={<ProtectedRoute role="user" />}>
           <Route element={<UserLayout />}>
             <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/menu" element={<Menu />} />
             <Route path="/pizza-builder" element={<PizzaBuilder />} />
             <Route path="/builder" element={<Navigate to="/pizza-builder" replace />} />
             <Route path="/cart" element={<Cart />} />
@@ -57,6 +60,7 @@ function App() {
             <Route path="/admin/orders" element={<AdminDashboard />} />
             <Route path="/admin/inventory" element={<InventoryManagement />} />
             <Route path="/admin/analytics" element={<AdminAnalytics />} />
+            <Route path="/admin/coupons" element={<CouponManagement />} />
           </Route>
         </Route>
 

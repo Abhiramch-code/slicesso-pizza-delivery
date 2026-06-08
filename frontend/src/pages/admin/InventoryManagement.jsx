@@ -1,16 +1,29 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchInventory, restockItem, createInventoryItem, deleteInventoryItem } from '../../store/slices/inventorySlice';
+import api from '../../services/api';
 
 const InventoryManagement = () => {
   const dispatch = useDispatch();
   const { items, stats, isLoading } = useSelector((state) => state.inventory);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newItem, setNewItem] = useState({ name: '', category: 'base', quantity: 0, unit: 'pcs', threshold: 10, unitCost: 0 });
+  const [forecast, setForecast] = useState([]);
+  const [showForecast, setShowForecast] = useState(false);
 
   useEffect(() => {
     dispatch(fetchInventory());
   }, [dispatch]);
+
+  const loadForecast = async () => {
+    try {
+      const { data } = await api.get('/inventory/forecast');
+      setForecast(data.forecast);
+      setShowForecast(true);
+    } catch (error) {
+      console.error('Error loading forecast', error);
+    }
+  };
 
   const handleRestock = async (id) => {
     dispatch(restockItem({ id, quantity: 50, note: 'Admin restock' }));
@@ -39,6 +52,9 @@ const InventoryManagement = () => {
           <p className="text-on-surface-variant">Manage your kitchen supplies and stock levels.</p>
         </div>
         <div className="flex gap-3">
+          <button onClick={loadForecast} className="px-6 py-2 bg-secondary-container text-on-secondary-container rounded-xl font-bold flex items-center gap-2 hover:bg-secondary-container/90">
+            <span>📊</span> Forecast
+          </button>
           <button onClick={() => setShowAddModal(true)} className="px-6 py-2 bg-primary text-white rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 shadow-lg shadow-primary/20">
             <span>➕</span> Add New Item
           </button>
@@ -152,6 +168,60 @@ const InventoryManagement = () => {
           </table>
         </div>
       </div>
+
+      {/* Inventory Forecast */}
+      {showForecast && forecast.length > 0 && (
+        <div className="bg-white rounded-3xl border border-outline-variant/30 shadow-sm overflow-hidden">
+          <div className="p-8 border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-low">
+            <h2 className="text-xl font-bold">Inventory Forecast</h2>
+            <button onClick={() => setShowForecast(false)} className="text-on-surface-variant hover:text-on-surface text-sm font-bold">Close</button>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-xs font-bold text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/30 bg-surface">
+                  <th className="px-8 py-5">Item</th>
+                  <th className="px-8 py-5">Category</th>
+                  <th className="px-8 py-5">Current Stock</th>
+                  <th className="px-8 py-5">Avg Daily Usage</th>
+                  <th className="px-8 py-5">Days Remaining</th>
+                  <th className="px-8 py-5">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-outline-variant/20">
+                {forecast.map((item) => (
+                  <tr key={item.id} className="hover:bg-black/5 transition-colors">
+                    <td className="px-8 py-6 font-bold text-on-surface">{item.name}</td>
+                    <td className="px-8 py-6 text-sm text-on-surface-variant capitalize">{item.category}</td>
+                    <td className="px-8 py-6 text-sm font-medium">{item.currentStock} {item.unit}</td>
+                    <td className="px-8 py-6 text-sm">{item.avgDailyUsage} {item.unit}/day</td>
+                    <td className="px-8 py-6">
+                      <span className={`font-bold ${
+                        item.status === 'critical' ? 'text-red-600' :
+                        item.status === 'low' ? 'text-orange-600' :
+                        item.status === 'no_data' ? 'text-gray-400' :
+                        'text-green-600'
+                      }`}>
+                        {item.daysRemaining !== null ? `${item.daysRemaining} days` : 'No data'}
+                      </span>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${
+                        item.status === 'critical' ? 'bg-red-100 text-red-600' :
+                        item.status === 'low' ? 'bg-orange-100 text-orange-600' :
+                        item.status === 'no_data' ? 'bg-gray-100 text-gray-500' :
+                        'bg-green-100 text-green-600'
+                      }`}>
+                        {item.status === 'no_data' ? 'No Data' : item.status === 'critical' ? 'Critical' : item.status === 'low' ? 'Low' : 'Sufficient'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Add Item Modal */}
       {showAddModal && (

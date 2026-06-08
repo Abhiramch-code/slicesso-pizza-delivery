@@ -18,6 +18,37 @@ const Checkout = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [couponCode, setCouponCode] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [discount, setDiscount] = useState(0);
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setError(null);
+    try {
+      const { data } = await api.post('/coupons/validate', {
+        code: couponCode,
+        orderAmount: totalAmount,
+      });
+      if (data.success) {
+        setAppliedCoupon(data.coupon);
+        setDiscount(data.discount);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid coupon');
+      setAppliedCoupon(null);
+      setDiscount(0);
+    }
+    setCouponLoading(false);
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setDiscount(0);
+    setCouponCode('');
+  };
 
   const handleCheckout = async () => {
     if (!user) {
@@ -32,23 +63,12 @@ const Checkout = () => {
 
     try {
       // Create Razorpay order (or mock order)
-      const { data: orderData } = await api.post('/orders/create-razorpay-order', { items });
+      const { data: orderData } = await api.post('/orders/create-razorpay-order', {
+        items,
+        couponCode: appliedCoupon?.code || null,
+      });
 
-      if (orderData.mockMode) {
-        // Mock payment flow - auto-verify
-        await api.post('/orders/verify-payment', {
-          razorpay_order_id: orderData.razorpayOrder.id,
-          razorpay_payment_id: `mock_pay_${Date.now()}`,
-          razorpay_signature: 'mock_signature',
-          items: orderData.items,
-          deliveryAddress,
-          mockMode: true,
-        });
 
-        dispatch(clearCart());
-        navigate('/orders');
-        return;
-      }
 
       // Real Razorpay flow
       const options = {
@@ -66,12 +86,13 @@ const Checkout = () => {
               razorpay_signature: response.razorpay_signature,
               items: orderData.items,
               deliveryAddress,
+              couponCode: appliedCoupon?.code || null,
             });
 
             dispatch(clearCart());
             navigate('/orders');
-          } catch {
-            setError('Payment verification failed');
+          } catch (verifyErr) {
+            setError(verifyErr.response?.data?.message || 'Payment verification failed');
             setLoading(false);
           }
         },
@@ -93,8 +114,8 @@ const Checkout = () => {
     }
   };
 
-  const tax = totalAmount * 0.08;
-  const finalTotal = totalAmount + tax;
+  const tax = (totalAmount - discount) * 0.08;
+  const finalTotal = totalAmount - discount + tax;
 
   if (items.length === 0) {
     return (
@@ -175,8 +196,16 @@ const Checkout = () => {
               {items.map((item, idx) => (
                 <div key={idx} className="flex justify-between items-center py-3 border-b border-outline-variant/20 last:border-0">
                   <div>
-                    <p className="font-bold">{item.base} + {item.sauce} + {item.cheese}</p>
-                    <p className="text-sm text-on-surface-variant">{[...item.veggies || [], ...item.meat || []].join(', ') || 'No toppings'}</p>
+                    <p className="font-bold">
+                      {item.isMenuItem
+                        ? item.name || 'Menu Item'
+                        : `${item.base} + ${item.sauce} + ${item.cheese}`}
+                    </p>
+                    <p className="text-sm text-on-surface-variant">
+                      {item.isMenuItem
+                        ? (item.category ? item.category.charAt(0).toUpperCase() + item.category.slice(1) : '')
+                        : ([...(item.veggies || []), ...(item.meat || [])].join(', ') || 'No toppings')}
+                    </p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold">₹{item.price * (item.quantity || 1)}</p>
@@ -197,6 +226,38 @@ const Checkout = () => {
                 <span>Subtotal</span>
                 <span className="font-medium text-on-surface">₹{totalAmount.toFixed(2)}</span>
               </div>
+
+              {/* Coupon Section */}
+              {appliedCoupon ? (
+                <div className="flex justify-between items-center text-green-700">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold">🏷️ {appliedCoupon.code}</span>
+                    <button onClick={handleRemoveCoupon} className="text-xs text-red-500 hover:underline">Remove</button>
+                  </div>
+                  <span className="font-bold">-₹{discount.toFixed(2)}</span>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-on-surface-variant ml-1">Have a coupon?</label>
+                  <div className="flex gap-2">
+                    <input
+                      className="flex-1 px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant focus:ring-2 focus:ring-primary focus:border-primary transition-all text-sm"
+                      placeholder="Enter code"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                    />
+                    <button
+                      onClick={handleApplyCoupon}
+                      disabled={couponLoading || !couponCode.trim()}
+                      className="px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary/90 disabled:opacity-50 transition-all"
+                    >
+                      {couponLoading ? '...' : 'Apply'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="flex justify-between items-center text-on-surface-variant">
                 <span>Estimated Tax (8%)</span>
                 <span className="font-medium text-on-surface">₹{tax.toFixed(2)}</span>

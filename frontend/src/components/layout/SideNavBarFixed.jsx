@@ -33,6 +33,14 @@ const SideNavBarFixed = () => {
           <span className="text-xl">📈</span>
           <span className="text-sm">Analytics</span>
         </NavLink>
+
+        <NavLink 
+          to="/admin/coupons" 
+          className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg font-bold transition-all duration-200 ${isActive ? 'bg-primary-container text-on-primary-container translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant'}`}
+        >
+          <span className="text-xl">🏷️</span>
+          <span className="text-sm">Coupons</span>
+        </NavLink>
       </nav>
       
       <div className="px-4 py-6 border-t border-outline-variant space-y-2">

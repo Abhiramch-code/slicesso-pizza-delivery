@@ -3,6 +3,8 @@ const Order = require('../models/Order');
 const Inventory = require('../models/Inventory');
 const InventoryTransaction = require('../models/InventoryTransaction');
 const Notification = require('../models/Notification');
+const User = require('../models/User');
+const Coupon = require('../models/Coupon');
 const getRazorpayInstance = require('../config/razorpay');
 
 // Pricing configuration
@@ -45,35 +47,51 @@ const PRICING = {
   },
 };
 
-// Calculate price for a single pizza
-const calculatePizzaPrice = (item) => {
+// Calculate PER-UNIT price for a single item (pizza or menu item)
+// NOTE: This returns the price for ONE unit. Callers must multiply by quantity.
+const calculateItemUnitPrice = (item) => {
+  // If item is a menu item with an explicit price, use it directly
+  if (item.isMenuItem && item.price) {
+    return item.price;
+  }
+
+  // Otherwise, calculate from pizza builder components
   let price = 0;
-  price += PRICING.base[item.base] || 200;
-  price += PRICING.sauce[item.sauce] || 30;
-  price += PRICING.cheese[item.cheese] || 60;
+  price += PRICING.base[item.base] || 0;
+  price += PRICING.sauce[item.sauce] || 0;
+  price += PRICING.cheese[item.cheese] || 0;
   if (item.veggies) {
-    item.veggies.forEach(v => { price += PRICING.veggie[v] || 20; });
+    item.veggies.forEach(v => { price += PRICING.veggie[v] || 0; });
   }
   if (item.meat) {
-    item.meat.forEach(m => { price += PRICING.meat[m] || 60; });
+    item.meat.forEach(m => { price += PRICING.meat[m] || 0; });
   }
-  return price * (item.quantity || 1);
+
+  // Fallback: if no price was calculated but item has a price field, use it
+  if (price === 0 && item.price) {
+    return item.price;
+  }
+
+  return price;
 };
 
 // Deduct inventory for an order
 const deductInventory = async (items, orderId) => {
   for (const item of items) {
+    // Skip menu items (non-pizza items don't have inventory deductions)
+    if (item.isMenuItem || !item.base) continue;
+
     const deductions = [
-      { name: item.base, category: 'base', qty: 0.3 * item.quantity },
-      { name: item.sauce, category: 'sauce', qty: 0.1 * item.quantity },
-      { name: item.cheese, category: 'cheese', qty: 0.15 * item.quantity },
+      { name: item.base, category: 'base', qty: 0.3 * (item.quantity || 1) },
+      { name: item.sauce, category: 'sauce', qty: 0.1 * (item.quantity || 1) },
+      { name: item.cheese, category: 'cheese', qty: 0.15 * (item.quantity || 1) },
     ];
 
     if (item.veggies) {
-      item.veggies.forEach(v => deductions.push({ name: v, category: 'veggie', qty: 0.05 * item.quantity }));
+      item.veggies.forEach(v => deductions.push({ name: v, category: 'veggie', qty: 0.05 * (item.quantity || 1) }));
     }
     if (item.meat) {
-      item.meat.forEach(m => deductions.push({ name: m, category: 'meat', qty: 0.08 * item.quantity }));
+      item.meat.forEach(m => deductions.push({ name: m, category: 'meat', qty: 0.08 * (item.quantity || 1) }));
     }
 
     for (const ded of deductions) {
@@ -106,9 +124,10 @@ exports.calculatePrice = (req, res) => {
     const { items } = req.body;
     let total = 0;
     const pricedItems = items.map(item => {
-      const price = calculatePizzaPrice(item);
-      total += price;
-      return { ...item, price };
+      const unitPrice = calculateItemUnitPrice(item);
+      const qty = item.quantity || 1;
+      total += unitPrice * qty;
+      return { ...item, price: unitPrice };
     });
     res.json({ success: true, items: pricedItems, totalAmount: total });
   } catch (error) {
@@ -120,42 +139,39 @@ exports.calculatePrice = (req, res) => {
 // @route   POST /api/orders/create-razorpay-order
 exports.createRazorpayOrder = async (req, res) => {
   try {
-    const { items } = req.body;
+    const { items, couponCode } = req.body;
     let totalAmount = 0;
     const pricedItems = items.map(item => {
-      const price = calculatePizzaPrice(item);
-      totalAmount += price;
-      return { ...item, price };
+      const unitPrice = calculateItemUnitPrice(item);
+      const qty = item.quantity || 1;
+      totalAmount += unitPrice * qty;
+      return { ...item, price: unitPrice };
     });
 
-    // Check if Razorpay keys are placeholder/missing (mock mode)
-    const isMockMode = !process.env.RAZORPAY_KEY_ID || 
-      process.env.RAZORPAY_KEY_ID === 'rzp_test_placeholder' ||
-      process.env.RAZORPAY_KEY_ID.startsWith('rzp_test_placeholder');
-
-    if (isMockMode) {
-      // Mock payment mode for development
-      const mockOrderId = `mock_order_${Date.now()}`;
-      return res.json({
-        success: true,
-        mockMode: true,
-        razorpayOrder: {
-          id: mockOrderId,
-          amount: totalAmount * 100,
-          currency: 'INR',
-          receipt: mockOrderId,
-          status: 'created',
-        },
-        items: pricedItems,
-        totalAmount,
-        key: 'mock_key',
-      });
+    // Apply coupon if provided
+    let discount = 0;
+    let appliedCoupon = null;
+    if (couponCode) {
+      const coupon = await Coupon.findOne({ code: couponCode.toUpperCase() });
+      if (coupon && coupon.active && coupon.expiryDate >= new Date() && (!coupon.maxUses || coupon.usedCount < coupon.maxUses) && totalAmount >= coupon.minOrderAmount) {
+        if (coupon.discountType === 'percentage') {
+          discount = (totalAmount * coupon.discountValue) / 100;
+        } else {
+          discount = coupon.discountValue;
+        }
+        discount = Math.min(discount, totalAmount);
+        appliedCoupon = { code: coupon.code, discountType: coupon.discountType, discountValue: coupon.discountValue };
+      }
     }
+
+    const finalAmount = totalAmount - discount;
+
+
 
     // Real Razorpay mode
     const razorpay = getRazorpayInstance();
     const options = {
-      amount: totalAmount * 100,
+      amount: finalAmount * 100,
       currency: 'INR',
       receipt: `order_${Date.now()}`,
     };
@@ -164,10 +180,12 @@ exports.createRazorpayOrder = async (req, res) => {
 
     res.json({
       success: true,
-      mockMode: false,
       razorpayOrder,
       items: pricedItems,
       totalAmount,
+      discount,
+      finalAmount,
+      appliedCoupon,
       key: process.env.RAZORPAY_KEY_ID,
     });
   } catch (error) {
@@ -179,53 +197,38 @@ exports.createRazorpayOrder = async (req, res) => {
 // @route   POST /api/orders/verify-payment
 exports.verifyPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, deliveryAddress, mockMode } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, deliveryAddress, couponCode } = req.body;
 
     // Calculate total
     let totalAmount = 0;
     const pricedItems = items.map(item => {
-      const price = calculatePizzaPrice(item);
-      totalAmount += price;
-      return { ...item, price };
+      const unitPrice = calculateItemUnitPrice(item);
+      const qty = item.quantity || 1;
+      totalAmount += unitPrice * qty;
+      return { ...item, price: unitPrice };
     });
 
-    // Mock payment verification
-    if (mockMode || razorpay_order_id?.startsWith('mock_order_')) {
-      const mockPaymentId = `mock_pay_${Date.now()}`;
-      
-      const order = await Order.create({
-        user: req.user._id,
-        items: pricedItems,
-        totalAmount,
-        paymentId: mockPaymentId,
-        razorpayOrderId: razorpay_order_id || `mock_order_${Date.now()}`,
-        razorpaySignature: 'mock_signature',
-        paymentStatus: 'completed',
-        deliveryAddress: deliveryAddress || { street: '123 Test St', city: 'Test City', state: 'TS', zip: '12345' },
-        estimatedDelivery: new Date(Date.now() + 45 * 60 * 1000),
-      });
-
-      // Deduct inventory
-      await deductInventory(pricedItems, order._id);
-
-      // Create notification
-      await Notification.create({
-        user: req.user._id,
-        type: 'payment_success',
-        title: 'Order Placed Successfully',
-        message: `Your order #${order._id.toString().slice(-8).toUpperCase()} has been placed. Total: ₹${totalAmount}`,
-        data: { orderId: order._id },
-      });
-
-      // Emit socket event
-      const io = req.app.get('io');
-      if (io) {
-        io.emit('new-order', { orderId: order._id, status: order.status });
-        io.to(`user_${req.user._id}`).emit('order-update', order);
+    // Apply coupon if provided
+    let discount = 0;
+    let appliedCoupon = null;
+    if (couponCode) {
+      const coupon = await Coupon.findOne({ code: couponCode.toUpperCase() });
+      if (coupon && coupon.active && coupon.expiryDate >= new Date() && (!coupon.maxUses || coupon.usedCount < coupon.maxUses) && totalAmount >= coupon.minOrderAmount) {
+        if (coupon.discountType === 'percentage') {
+          discount = (totalAmount * coupon.discountValue) / 100;
+        } else {
+          discount = coupon.discountValue;
+        }
+        discount = Math.min(discount, totalAmount);
+        appliedCoupon = { code: coupon.code, discountType: coupon.discountType, discountValue: coupon.discountValue };
+        coupon.usedCount += 1;
+        await coupon.save();
       }
-
-      return res.status(201).json({ success: true, order, mockMode: true });
     }
+
+    const finalAmount = totalAmount - discount;
+
+
 
     // Real Razorpay verification
     const sign = razorpay_order_id + '|' + razorpay_payment_id;
@@ -241,7 +244,9 @@ exports.verifyPayment = async (req, res) => {
     const order = await Order.create({
       user: req.user._id,
       items: pricedItems,
-      totalAmount,
+      totalAmount: finalAmount,
+      discount,
+      couponCode: appliedCoupon?.code || null,
       paymentId: razorpay_payment_id,
       razorpayOrderId: razorpay_order_id,
       razorpaySignature: razorpay_signature,
@@ -252,6 +257,12 @@ exports.verifyPayment = async (req, res) => {
 
     // Deduct inventory
     await deductInventory(pricedItems, order._id);
+
+    // Update loyalty points: ₹100 spent = 10 points
+    const earnedPoints = Math.floor(finalAmount / 100) * 10;
+    if (earnedPoints > 0) {
+      await User.findByIdAndUpdate(req.user._id, { $inc: { loyaltyPoints: earnedPoints } });
+    }
 
     // Create notification
     await Notification.create({

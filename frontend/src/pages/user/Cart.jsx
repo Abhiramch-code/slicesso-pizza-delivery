@@ -13,10 +13,10 @@ const Cart = () => {
         <span className="text-6xl">🍕</span>
         <h2 className="text-2xl font-bold">Your cart is empty</h2>
         <button 
-          onClick={() => navigate('/pizza-builder')}
+          onClick={() => navigate('/menu')}
           className="px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-colors"
         >
-          Build a Pizza
+          Browse Menu
         </button>
       </div>
     );
@@ -35,50 +35,64 @@ const Cart = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Shopping List */}
         <div className="lg:col-span-8 space-y-4">
-          {items.map((item, index) => (
-            <div key={index} className="bg-white/60 backdrop-blur-md rounded-xl p-4 flex flex-col md:flex-row gap-6 items-start md:items-center transition-all hover:translate-x-1 duration-200 border border-black/5 shadow-sm">
-              <div className="flex-grow">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-xl font-bold text-on-surface">Custom Pizza</h3>
-                    <p className="text-sm text-on-surface-variant mt-1 flex flex-wrap gap-2">
-                      <span className="bg-surface-variant px-2 py-0.5 rounded">{item.base}</span>
-                      <span className="bg-surface-variant px-2 py-0.5 rounded">{item.sauce}</span>
-                      <span className="bg-surface-variant px-2 py-0.5 rounded">{item.cheese}</span>
-                    </p>
-                    <p className="text-sm text-on-surface-variant mt-1">
-                      {item.veggies?.concat(item.meat || []).join(', ')}
-                    </p>
+          {items.map((item, index) => {
+            const isMenuItem = item.isMenuItem;
+            const displayName = isMenuItem ? item.name : 'Custom Pizza';
+            
+            return (
+              <div key={index} className="bg-white/60 backdrop-blur-md rounded-xl p-4 flex flex-col md:flex-row gap-6 items-start md:items-center transition-all hover:translate-x-1 duration-200 border border-black/5 shadow-sm">
+                <div className="flex-grow">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-xl font-bold text-on-surface">{displayName}</h3>
+                      {!isMenuItem && (
+                        <>
+                          <p className="text-sm text-on-surface-variant mt-1 flex flex-wrap gap-2">
+                            <span className="bg-surface-variant px-2 py-0.5 rounded">{item.base}</span>
+                            <span className="bg-surface-variant px-2 py-0.5 rounded">{item.sauce}</span>
+                            <span className="bg-surface-variant px-2 py-0.5 rounded">{item.cheese}</span>
+                          </p>
+                          <p className="text-sm text-on-surface-variant mt-1">
+                            {item.veggies?.concat(item.meat || []).join(', ')}
+                          </p>
+                        </>
+                      )}
+                      {isMenuItem && item.category && (
+                        <p className="text-sm text-on-surface-variant mt-1 capitalize">
+                          {item.category}
+                        </p>
+                      )}
+                    </div>
+                    <span className="font-bold text-lg text-on-surface">₹{item.price * (item.quantity || 1)}</span>
                   </div>
-                  <span className="font-bold text-lg text-on-surface">₹{item.price * (item.quantity || 1)}</span>
-                </div>
-                
-                <div className="mt-6 flex justify-between items-center">
-                  <div className="flex items-center gap-1 bg-surface-container rounded-full p-1 border border-outline-variant/30">
+                  
+                  <div className="mt-6 flex justify-between items-center">
+                    <div className="flex items-center gap-1 bg-surface-container rounded-full p-1 border border-outline-variant/30">
+                      <button 
+                        onClick={() => item.quantity > 1 && dispatch(updateQuantity({ index, quantity: item.quantity - 1 }))}
+                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white text-primary transition-all active:scale-90"
+                      >
+                        <span className="text-lg font-bold">-</span>
+                      </button>
+                      <span className="px-3 text-sm font-semibold w-8 text-center">{item.quantity || 1}</span>
+                      <button 
+                        onClick={() => dispatch(updateQuantity({ index, quantity: (item.quantity || 1) + 1 }))}
+                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white text-primary transition-all active:scale-90"
+                      >
+                        <span className="text-lg font-bold">+</span>
+                      </button>
+                    </div>
                     <button 
-                      onClick={() => item.quantity > 1 && dispatch(updateQuantity({ index, quantity: item.quantity - 1 }))}
-                      className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white text-primary transition-all active:scale-90"
+                      onClick={() => dispatch(removeFromCart(index))}
+                      className="text-on-surface-variant hover:text-error flex items-center gap-1 text-sm font-medium transition-colors"
                     >
-                      <span className="text-lg font-bold">-</span>
-                    </button>
-                    <span className="px-3 text-sm font-semibold w-8 text-center">{item.quantity || 1}</span>
-                    <button 
-                      onClick={() => dispatch(updateQuantity({ index, quantity: (item.quantity || 1) + 1 }))}
-                      className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white text-primary transition-all active:scale-90"
-                    >
-                      <span className="text-lg font-bold">+</span>
+                      Remove
                     </button>
                   </div>
-                  <button 
-                    onClick={() => dispatch(removeFromCart(index))}
-                    className="text-on-surface-variant hover:text-error flex items-center gap-1 text-sm font-medium transition-colors"
-                  >
-                    Remove
-                  </button>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Order Summary Sidebar */}
@@ -119,10 +133,10 @@ const Cart = () => {
                 Proceed to Checkout
               </button>
               <button 
-                onClick={() => navigate('/pizza-builder')}
+                onClick={() => navigate('/menu')}
                 className="w-full bg-surface-variant/50 text-on-surface-variant py-4 rounded-xl text-sm font-bold hover:bg-surface-variant transition-all border border-outline-variant/50"
               >
-                Add More Pizzas
+                Browse Menu
               </button>
             </div>
             

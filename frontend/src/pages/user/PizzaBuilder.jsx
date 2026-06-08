@@ -1,7 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { addToCart } from '../../store/slices/cartSlice';
+import api from '../../services/api';
+import { toppingSVGs } from '../../components/pizza/PizzaToppingSVG';
 
 const steps = [
   { 
@@ -80,6 +82,7 @@ const steps = [
 const PizzaBuilder = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   
   const [currentStep, setCurrentStep] = useState(0);
   const [selections, setSelections] = useState({
@@ -90,6 +93,20 @@ const PizzaBuilder = () => {
     meat: [],
     quantity: 1
   });
+
+  // Handle pre-selected ingredients from menu
+  useEffect(() => {
+    if (location.state?.preSelected) {
+      setSelections(prev => ({
+        ...prev,
+        base: location.state.preSelected.base || prev.base,
+        sauce: location.state.preSelected.sauce || prev.sauce,
+        cheese: location.state.preSelected.cheese || prev.cheese,
+        veggies: location.state.preSelected.veggies || [],
+        meat: location.state.preSelected.meat || [],
+      }));
+    }
+  }, [location.state]);
   
   const totalPrice = useMemo(() => {
     let total = 0;
@@ -115,16 +132,95 @@ const PizzaBuilder = () => {
     return total;
   }, [selections.base, selections.sauce, selections.cheese, selections.veggies, selections.meat]);
 
-  const toppingsPositions = useMemo(() => {
-    const positions = [];
-    for (let i = 0; i < 12; i++) {
-      positions.push({
-        top: 20 + ((i * 5) % 60),
-        left: 20 + ((i * 7) % 60),
+  const [savingFavorite, setSavingFavorite] = useState(false);
+
+  const crustStyles = {
+    'Thin Crust': 'from-[#e8c99b] to-[#d4a574]',
+    'Thick Crust': 'from-[#c4956a] to-[#a87d52]',
+    'Stuffed Crust': 'from-[#dbb878] to-[#c9a55e]',
+    'Cheese Burst': 'from-[#f0d58c] to-[#e0c36e]',
+    'Whole Wheat': 'from-[#b89a6a] to-[#96794e]',
+  };
+
+  const sauceStyles = {
+    'Tomato Basil': 'bg-red-600/70',
+    'BBQ': 'bg-amber-800/70',
+    'Pesto': 'bg-green-700/70',
+    'Garlic Parmesan': 'bg-amber-200/70',
+    'Arrabbiata': 'bg-red-800/70',
+  };
+
+  const cheeseStyles = {
+    'Mozzarella': 'from-[#fff5cc] to-[#ffe680]',
+    'Cheddar': 'from-[#ffcc66] to-[#e6a820]',
+    'Parmesan': 'from-[#f5f0dc] to-[#e8dfc0]',
+    'Mixed': 'from-[#ffe699] to-[#e6c84d]',
+  };
+
+  const veggieIcons = {
+    'Onion': '🧅',
+    'Capsicum': '🫑',
+    'Tomato': '🍅',
+    'Mushroom': '🍄',
+    'Corn': '🌽',
+    'Olive': '🫒',
+    'Jalapeno': '🌶️',
+    'Paneer': '🧈',
+  };
+
+  const meatIcons = {
+    'Chicken': '🍗',
+    'Pepperoni': '🥓',
+    'Sausage': '🌭',
+    'Bacon': '🥓',
+  };
+
+  const handleSaveFavorite = async () => {
+    setSavingFavorite(true);
+    try {
+      await api.post('/favorites', {
+        name: `${selections.base} + ${selections.sauce}`,
+        base: selections.base,
+        sauce: selections.sauce,
+        cheese: selections.cheese,
+        veggies: selections.veggies,
+        meat: selections.meat,
+        price: totalPrice,
       });
+    } catch (err) {
+      console.error('Error saving favorite', err);
     }
+    setSavingFavorite(false);
+  };
+
+  const generateToppingPositions = (items, startIndex) => {
+    const positions = [];
+    items.forEach((item, i) => {
+      const angle = ((startIndex + i) * 137.508 * (Math.PI / 180));
+      const radius = 20 + ((startIndex + i) % 3) * 12;
+      const cx = 50 + radius * Math.cos(angle);
+      const cy = 50 + radius * Math.sin(angle);
+      const ToppingSVG = toppingSVGs[item];
+      positions.push({
+        key: item,
+        svg: ToppingSVG,
+        left: `${cx}%`,
+        top: `${cy}%`,
+      });
+    });
     return positions;
-  }, []);
+  };
+
+  const toppingPositions = useMemo(() => {
+    return [
+      ...generateToppingPositions(selections.veggies, 0),
+      ...generateToppingPositions(selections.meat, selections.veggies.length),
+    ];
+  }, [selections.veggies, selections.meat]);
+
+  const crustGradient = crustStyles[selections.base] || crustStyles['Thin Crust'];
+  const sauceBg = sauceStyles[selections.sauce] || sauceStyles['Tomato Basil'];
+  const cheeseGradient = cheeseStyles[selections.cheese] || cheeseStyles['Mozzarella'];
 
   const handleSelection = (key, val, type) => {
     setSelections(prev => {
@@ -180,39 +276,45 @@ const PizzaBuilder = () => {
           <div className="relative aspect-square w-full max-w-[500px] mx-auto group">
             <div className="absolute inset-0 bg-secondary-container/10 rounded-full blur-3xl scale-90 group-hover:scale-100 transition-transform duration-700"></div>
             <div className="relative z-10 w-full h-full flex items-center justify-center">
+              {/* Plate */}
               <div className="absolute inset-4 rounded-full border border-outline-variant/30 shadow-2xl bg-white/10 backdrop-blur-sm"></div>
               
-              <div className="absolute inset-8 rounded-full bg-gradient-to-br from-[#d4a574] to-[#c4956a] shadow-xl transition-all duration-500 flex items-center justify-center">
-                <span className="text-4xl opacity-30">🥖</span>
-              </div>
+              {/* Crust - changes based on selection */}
+              <div className={`absolute inset-8 rounded-full bg-gradient-to-br ${crustGradient} shadow-xl transition-all duration-500`}></div>
               
+              {/* Sauce - changes color based on selection */}
               <div 
-                className="absolute inset-10 rounded-full bg-red-600/60 mix-blend-multiply transition-opacity duration-500" 
-                style={{ opacity: selections.sauce ? '0.7' : '0' }}
+                className={`absolute inset-10 rounded-full ${sauceBg} mix-blend-multiply transition-all duration-500`} 
+                style={{ opacity: selections.sauce ? '0.8' : '0' }}
               ></div>
               
+              {/* Cheese - changes based on selection */}
               <div 
-                className="absolute inset-10 rounded-full overflow-hidden transition-opacity duration-500 bg-gradient-to-br from-[#ffdd99] to-[#eecc77]" 
+                className={`absolute inset-10 rounded-full overflow-hidden transition-opacity duration-500 bg-gradient-to-br ${cheeseGradient}`} 
                 style={{ opacity: selections.cheese ? '1' : '0' }}
               >
-                <span className="text-4xl opacity-30 flex items-center justify-center w-full h-full">🧀</span>
               </div>
 
+              {/* Toppings - SVG components for each topping */}
               <div 
                 className="absolute inset-10 transition-opacity duration-500"
                 style={{ opacity: (selections.veggies.length > 0 || selections.meat.length > 0) ? '1' : '0' }}
               >
-                {/* Mock toppings */}
-                {(selections.veggies.length > 0 || selections.meat.length > 0) && toppingsPositions.map((pos, i) => (
-                  <div 
-                    key={i} 
-                    className="absolute w-4 h-4 rounded-full bg-green-700 shadow-sm border border-black/10"
-                    style={{ 
-                      top: `${pos.top}%`, 
-                      left: `${pos.left}%` 
-                    }}
-                  ></div>
-                ))}
+                {toppingPositions.map((pos) => {
+                  const ToppingSVG = pos.svg;
+                  return (
+                    <div 
+                      key={pos.key} 
+                      className="absolute w-8 h-8 transform -translate-x-1/2 -translate-y-1/2 drop-shadow-md transition-all duration-300 hover:scale-125"
+                      style={{ 
+                        top: pos.top, 
+                        left: pos.left,
+                      }}
+                    >
+                      {ToppingSVG && <ToppingSVG />}
+                    </div>
+                  );
+                })}
               </div>
             </div>
             
@@ -223,6 +325,17 @@ const PizzaBuilder = () => {
                 <span className="font-bold text-on-surface">12-15 Mins</span>
               </div>
             </div>
+          </div>
+
+          {/* Save Favorite Button */}
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={handleSaveFavorite}
+              disabled={savingFavorite}
+              className="px-6 py-3 bg-white/60 backdrop-blur-md border border-primary/30 rounded-xl font-semibold text-primary hover:bg-primary/10 transition-all flex items-center gap-2 disabled:opacity-50"
+            >
+              <span>❤️</span> {savingFavorite ? 'Saving...' : 'Save as Favorite'}
+            </button>
           </div>
         </div>
 

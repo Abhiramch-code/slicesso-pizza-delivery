@@ -56,6 +56,7 @@ exports.register = async (req, res) => {
         email: user.email,
         role: user.role,
         isVerified: user.isVerified,
+        loyaltyPoints: user.loyaltyPoints || 0,
       },
     });
   } catch (error) {
@@ -99,6 +100,7 @@ exports.login = async (req, res) => {
         email: user.email,
         role: user.role,
         isVerified: user.isVerified,
+        loyaltyPoints: user.loyaltyPoints || 0,
       },
     });
   } catch (error) {
@@ -245,6 +247,7 @@ exports.getMe = async (req, res) => {
       isVerified: req.user.isVerified,
       address: req.user.address,
       phone: req.user.phone,
+      loyaltyPoints: req.user.loyaltyPoints || 0,
     },
   });
 };
@@ -270,6 +273,7 @@ exports.updateProfile = async (req, res) => {
         isVerified: user.isVerified,
         address: user.address,
         phone: user.phone,
+        loyaltyPoints: user.loyaltyPoints || 0,
       },
     });
   } catch (error) {

@@ -162,8 +162,8 @@ const AdminDashboard = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
-                          <p className="text-sm font-bold">{order.items.length}x Custom Pizza</p>
-                          <p className="text-xs text-on-surface-variant">{order.items[0]?.base}, {order.items[0]?.sauce}</p>
+                          <p className="text-sm font-bold">{order.items.length}x {order.items[0]?.isMenuItem ? order.items[0]?.name : 'Custom Pizza'}</p>
+                          <p className="text-xs text-on-surface-variant">{order.items[0]?.isMenuItem ? (order.items[0]?.category || '') : `${order.items[0]?.base || ''}, ${order.items[0]?.sauce || ''}`}</p>
                         </div>
                       </td>
                       <td className="px-6 py-4">

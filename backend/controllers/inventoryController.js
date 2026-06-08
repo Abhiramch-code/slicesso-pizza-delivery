@@ -1,5 +1,6 @@
 const Inventory = require('../models/Inventory');
 const InventoryTransaction = require('../models/InventoryTransaction');
+const Order = require('../models/Order');
 
 // @desc    Get all inventory items
 // @route   GET /api/inventory
@@ -157,6 +158,54 @@ exports.getAnalytics = async (req, res) => {
         lowStockItems: lowStockItems.map(i => ({ id: i._id, name: i.name, category: i.category, quantity: i.quantity, threshold: i.threshold })),
       },
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Get inventory forecast
+// @route   GET /api/inventory/forecast
+exports.getForecast = async (req, res) => {
+  try {
+    const items = await Inventory.find();
+
+    // Get deduction transactions from the last 30 days
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const deductions = await InventoryTransaction.find({
+      type: 'deduction',
+      createdAt: { $gte: thirtyDaysAgo },
+    });
+
+    // Calculate average daily usage per inventory item
+    const usageMap = {};
+    deductions.forEach(tx => {
+      const itemId = tx.inventoryItem.toString();
+      if (!usageMap[itemId]) {
+        usageMap[itemId] = 0;
+      }
+      usageMap[itemId] += tx.quantity;
+    });
+
+    const forecast = items.map(item => {
+      const totalUsed = usageMap[item._id.toString()] || 0;
+      const avgDailyUsage = totalUsed / 30;
+      const daysRemaining = avgDailyUsage > 0 ? Math.floor(item.quantity / avgDailyUsage) : null;
+
+      return {
+        id: item._id,
+        name: item.name,
+        category: item.category,
+        currentStock: item.quantity,
+        unit: item.unit,
+        avgDailyUsage: Math.round(avgDailyUsage * 100) / 100,
+        daysRemaining,
+        status: daysRemaining === null ? 'no_data' : daysRemaining <= 3 ? 'critical' : daysRemaining <= 7 ? 'low' : 'sufficient',
+      };
+    });
+
+    res.json({ success: true, forecast });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

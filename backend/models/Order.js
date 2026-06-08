@@ -1,11 +1,17 @@
 const mongoose = require('mongoose');
 
 const pizzaItemSchema = new mongoose.Schema({
-  base: { type: String, required: true },
-  sauce: { type: String, required: true },
-  cheese: { type: String, required: true },
+  // Pizza builder fields (optional for menu items)
+  base: { type: String, required: false },
+  sauce: { type: String, required: false },
+  cheese: { type: String, required: false },
   veggies: [String],
   meat: [String],
+  // Menu item fields
+  name: { type: String, required: false },
+  category: { type: String, required: false },
+  isMenuItem: { type: Boolean, default: false },
+  menuItemId: { type: String, required: false },
   quantity: { type: Number, required: true, min: 1, default: 1 },
   price: { type: Number, required: true },
 });
@@ -20,6 +26,14 @@ const orderSchema = new mongoose.Schema({
   totalAmount: {
     type: Number,
     required: true,
+  },
+  discount: {
+    type: Number,
+    default: 0,
+  },
+  couponCode: {
+    type: String,
+    default: null,
   },
   status: {
     type: String,

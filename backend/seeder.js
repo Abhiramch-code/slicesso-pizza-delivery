@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const User = require('./models/User');
 const Inventory = require('./models/Inventory');
+const Coupon = require('./models/Coupon');
 
 const ingredients = [
   // Pizza Bases
@@ -49,6 +50,7 @@ const seedData = async () => {
     // Clear existing data
     await Inventory.deleteMany();
     await User.deleteMany();
+    await Coupon.deleteMany();
     console.log('Existing data cleared');
 
     // Insert inventory data
@@ -74,6 +76,14 @@ const seedData = async () => {
       isVerified: true,
     });
     console.log('Test user created:', testUser.email);
+
+    // Create sample coupons
+    const coupons = await Coupon.insertMany([
+      { code: 'WELCOME10', discountType: 'percentage', discountValue: 10, active: true, expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), minOrderAmount: 300 },
+      { code: 'STUDENT15', discountType: 'percentage', discountValue: 15, active: true, expiryDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), minOrderAmount: 200 },
+      { code: 'FREEDELIVERY', discountType: 'fixed', discountValue: 50, active: true, expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), minOrderAmount: 0 },
+    ]);
+    console.log('Sample coupons created:', coupons.map(c => c.code).join(', '));
 
     console.log('\n=== Seeding Complete ===');
     console.log('Admin: admin@slicesso.com / admin123');

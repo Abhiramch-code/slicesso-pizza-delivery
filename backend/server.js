@@ -14,6 +14,9 @@ const authRoutes = require('./routes/authRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const couponRoutes = require('./routes/couponRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
+const menuRoutes = require('./routes/menuRoutes');
 
 // Connect to database
 connectDB();
@@ -54,7 +57,7 @@ app.use(cors({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: process.env.NODE_ENV === 'development' ? 1000 : 100,
 });
 app.use('/api/', limiter);
 
@@ -67,6 +70,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/favorites', favoriteRoutes);
+app.use('/api/menu', menuRoutes);
 
 // Base route
 app.get('/', (req, res) => {

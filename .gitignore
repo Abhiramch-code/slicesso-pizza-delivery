@@ -25,3 +25,6 @@ build/
 
 # Coverage
 coverage/
+
+# Test screenshots
+test*.png

@@ -21,7 +21,8 @@ const TopNavBar = () => {
         <div className="hidden md:flex gap-6">
           {isAuthenticated && user?.role === 'user' && (
             <>
-              <Link to="/pizza-builder" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Menu</Link>
+              <Link to="/menu" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Menu</Link>
+              <Link to="/pizza-builder" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Custom Pizza</Link>
               <Link to="/orders" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Track Order</Link>
             </>
           )}
@@ -30,7 +31,7 @@ const TopNavBar = () => {
           )}
           {!isAuthenticated && (
             <>
-              <Link to="/pizza-builder" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Menu</Link>
+              <Link to="/menu" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Menu</Link>
               <Link to="/login" className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">Track Order</Link>
             </>
           )}
